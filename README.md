@@ -36,38 +36,6 @@ It includes a storytelling interface, user authentication, and a dashboard that 
 | **Database (Planned)** | MySQL or SQLite |
 | **Version Control** | Git + GitHub |
 
----
-
-## 📂 Project Structure
-
-## Project Structure
-
-finvoiceAi/
-├── finvoice-frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Login/
-│   │   │   │   └── login.js
-│   │   │   ├── Dashboard/
-│   │   │   │   └── dashboard.js
-│   │   │   ├── BalanceSheet/
-│   │   │   │   └── BalanceSheet.js
-│   │   │   ├── PayableAlerts/
-│   │   │   │   └── PayableAlerts.js
-│   │   │   ├── Subscriptions/
-│   │   │   │   └── Subscriptions.js
-│   │   │   └── Profile/
-│   │   │       └── Profile.js
-│   │   ├── App.js
-│   │   └── index.js
-│   ├── package.json
-│   └── README.md
-├── backend/
-│   ├── app.py
-│   └── requirements.txt
-└── README.md
-
-
 ## ⚙️ Setup and Run Locally
 
 ### 1️⃣ Clone the Repository
