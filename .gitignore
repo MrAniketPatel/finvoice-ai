@@ -1,0 +1,10 @@
+# Node
+finvoice-frontend/node_modules/
+finvoice-frontend/build/
+
+# Python
+backend/venv/
+
+# Logs
+*.log
+
