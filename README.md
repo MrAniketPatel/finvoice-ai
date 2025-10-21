@@ -40,32 +40,33 @@ It includes a storytelling interface, user authentication, and a dashboard that 
 
 ## 📂 Project Structure
 
-finvoiceAi/  
-📁 finvoice-frontend/  
-&nbsp;&nbsp;📁 src/  
-&nbsp;&nbsp;&nbsp;&nbsp;📁 components/  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 Login/  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 login.js  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 Dashboard/  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 dashboard.js  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 BalanceSheet/  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 BalanceSheet.js  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 PayableAlerts/  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 PayableAlerts.js  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 Subscriptions/  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 Subscriptions.js  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 Profile/  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 Profile.js  
-&nbsp;&nbsp;&nbsp;&nbsp;📝 App.js  
-&nbsp;&nbsp;&nbsp;&nbsp;📝 index.js  
-&nbsp;&nbsp;📝 package.json  
-&nbsp;&nbsp;📝 README.md  
-📁 backend/  
-&nbsp;&nbsp;📝 app.py  
-&nbsp;&nbsp;📝 requirements.txt  
-📝 README.md  
+## Project Structure
 
----
+finvoiceAi/
+├── finvoice-frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Login/
+│   │   │   │   └── login.js
+│   │   │   ├── Dashboard/
+│   │   │   │   └── dashboard.js
+│   │   │   ├── BalanceSheet/
+│   │   │   │   └── BalanceSheet.js
+│   │   │   ├── PayableAlerts/
+│   │   │   │   └── PayableAlerts.js
+│   │   │   ├── Subscriptions/
+│   │   │   │   └── Subscriptions.js
+│   │   │   └── Profile/
+│   │   │       └── Profile.js
+│   │   ├── App.js
+│   │   └── index.js
+│   ├── package.json
+│   └── README.md
+├── backend/
+│   ├── app.py
+│   └── requirements.txt
+└── README.md
+
 
 ## ⚙️ Setup and Run Locally
 
