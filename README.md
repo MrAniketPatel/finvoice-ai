@@ -3,7 +3,7 @@
 > An AI-powered finance dashboard for smarter accounting, payables, and subscription management.
 
 ![React](https://img.shields.io/badge/Frontend-React-blue?logo=react)
-![Node](https://img.shields.io/badge/Backend-Python%20%2F%20Flask-green?logo=python)
+![Python](https://img.shields.io/badge/Backend-Python%20%2F%20Flask-green?logo=python)
 ![License](https://img.shields.io/badge/license-Private-red)
 ![Status](https://img.shields.io/badge/status-Active-brightgreen)
 
@@ -12,18 +12,18 @@
 ## 🧠 Overview
 
 **FinVoice.AI** is a finance management web app designed to bring automation and insight into accounting and payments.  
-It includes a storytelling interface, user authentication, and a powerful dashboard that summarizes financial health.
+It includes a storytelling interface, user authentication, and a dashboard that summarizes financial health.
 
 ---
 
 ## 🚀 Features
 
 - 🔐 **Secure Login/Signup** system  
-- 📊 **Interactive Dashboard** with key financial insights  
-- 📘 **Balance Sheet Overview** for quick reference  
-- 🔔 **Payable Alerts** to notify upcoming or pending payments  
-- 💳 **Subscription Management** for recurring services  
-- 👤 **Profile Page** displaying stored user details  
+- 📊 **Interactive Dashboard**  
+- 📘 **Balance Sheet Overview**  
+- 🔔 **Payable Alerts**  
+- 💳 **Subscription Management**  
+- 👤 **Profile Page** with stored user details  
 
 ---
 
@@ -40,34 +40,30 @@ It includes a storytelling interface, user authentication, and a powerful dashbo
 
 ## 📂 Project Structure
 
-finvoiceAi/
-│
-├── finvoice-frontend/
-│ ├── src/
-│ │ ├── components/
-│ │ │ ├── Login/
-│ │ │ │ └── login.js
-│ │ │ ├── Dashboard/
-│ │ │ │ └── dashboard.js
-│ │ │ ├── BalanceSheet/
-│ │ │ │ └── BalanceSheet.js
-│ │ │ ├── PayableAlerts/
-│ │ │ │ └── PayableAlerts.js
-│ │ │ ├── Subscriptions/
-│ │ │ │ └── Subscriptions.js
-│ │ │ └── Profile/
-│ │ │ └── Profile.js
-│ │ ├── App.js
-│ │ └── index.js
-│ ├── package.json
-│ └── README.md
-│
-├── backend/ (planned)
-│ ├── app.py
-│ └── requirements.txt
-│
-└── README.md
-
+finvoiceAi/  
+📁 finvoice-frontend/  
+&nbsp;&nbsp;📁 src/  
+&nbsp;&nbsp;&nbsp;&nbsp;📁 components/  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 Login/  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 login.js  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 Dashboard/  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 dashboard.js  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 BalanceSheet/  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 BalanceSheet.js  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 PayableAlerts/  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 PayableAlerts.js  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 Subscriptions/  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 Subscriptions.js  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 Profile/  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📝 Profile.js  
+&nbsp;&nbsp;&nbsp;&nbsp;📝 App.js  
+&nbsp;&nbsp;&nbsp;&nbsp;📝 index.js  
+&nbsp;&nbsp;📝 package.json  
+&nbsp;&nbsp;📝 README.md  
+📁 backend/  
+&nbsp;&nbsp;📝 app.py  
+&nbsp;&nbsp;📝 requirements.txt  
+📝 README.md  
 
 ---
 
@@ -107,12 +103,4 @@ Aniket Patel	Lead Developer
 📜 License
 This project is private and licensed for educational and developmental purposes only.
 Unauthorized use or redistribution is prohibited.
-
-🖼️ Preview (Coming Soon)
-Screenshots and demo links will be added once the UI is finalized.
-
-Developed with ❤️ by Aniket Patel
-
-yaml
-Copy code
 
