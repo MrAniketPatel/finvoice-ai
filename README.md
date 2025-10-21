@@ -39,7 +39,7 @@ It includes a storytelling interface, user authentication, and a dashboard that 
 ## ⚙️ Setup and Run Locally
 
 ### 1️⃣ Clone the Repository
-```bash
+
 git clone https://github.com/MrAniketPatel/finvoice-ai.git
 cd finvoice-ai/finvoice-frontend
 2️⃣ Install Dependencies
