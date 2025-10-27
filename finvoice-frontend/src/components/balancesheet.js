@@ -1,35 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 function BalanceSheet() {
-  const dummyData = [
-    { id: 1, name: "Invoice 001", amount: 5000 },
-    { id: 2, name: "Invoice 002", amount: 3000 },
-  ];
+  const [data, setData] = useState(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch("http://localhost:5000/api/balancesheet", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const result = await res.json();
+
+        if (!res.ok) throw new Error(result.msg || "Failed to fetch");
+
+        setData(result);
+      } catch (err) {
+        console.error("BalanceSheet error:", err);
+        setError(err.message);
+      }
+    };
+
+    fetchBalance();
+  }, []);
+
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (!data) return <p>Loading balance sheet...</p>;
 
   return (
-    <div>
-      <h2>Balance Sheet</h2>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Invoice</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dummyData.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.name}</td>
-              <td>{item.amount}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div style={{ padding: "20px" }}>
+      <h2>Balance Sheet Summary</h2>
+      <p><strong>Total Income:</strong> ₹{data.totalIncome}</p>
+      <p><strong>Total Expense:</strong> ₹{data.totalExpense}</p>
+      <p><strong>Profit:</strong> ₹{data.profit}</p>
     </div>
   );
 }
 
 export default BalanceSheet;
-

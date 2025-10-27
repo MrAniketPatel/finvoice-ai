@@ -1,20 +1,35 @@
 import React, { useState } from "react";
 import Login from "./components/login.js";
+import Register from "./components/register.js";
 import Dashboard from "./components/dashboard.js";
 import BalanceSheet from "./components/balancesheet.js";
 import PayableAlerts from "./components/payable-alerts.js";
 import Profile from "./components/profile.js";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [view, setView] = useState("dashboard"); // options: dashboard, balance, alerts, profile
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [view, setView] = useState("dashboard");
+  const [showRegister, setShowRegister] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+  };
 
   if (!isLoggedIn) {
-    // Show login page if not logged in
-    return <Login onLoginSuccess={() => setIsLoggedIn(true)} />;
+    return showRegister ? (
+      <Register
+        onRegisterSuccess={() => setShowRegister(false)}
+        switchToLogin={() => setShowRegister(false)}
+      />
+    ) : (
+      <Login
+        onLoginSuccess={() => setIsLoggedIn(true)}
+        switchToRegister={() => setShowRegister(true)}
+      />
+    );
   }
 
-  // Render selected view after login
   const renderView = () => {
     switch (view) {
       case "dashboard":
@@ -37,6 +52,7 @@ function App() {
         <button onClick={() => setView("balance")}>Balance Sheet</button>
         <button onClick={() => setView("alerts")}>Payable Alerts</button>
         <button onClick={() => setView("profile")}>Profile</button>
+        <button onClick={handleLogout}>Logout</button>
       </nav>
       {renderView()}
     </div>
@@ -44,4 +60,3 @@ function App() {
 }
 
 export default App;
-
