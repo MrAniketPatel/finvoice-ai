@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microphone Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f7f9fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 { color: #1B263B; }
+        button {
+            padding: 15px 30px;
+            background: #71C7B8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button:hover { opacity: 0.9; }
+        #volumeBar {
+            width: 100%;
+            height: 30px;
+            background: #e5e7eb;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        #volumeLevel {
+            height: 100%;
+            background: linear-gradient(90deg, #71C7B8, #1B263B);
+            width: 0%;
+            transition: width 0.1s;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .success { background: #d1fae5; color: #065f46; }
+        .error { background: #fee2e2; color: #991b1b; }
+        .info { background: #dbeafe; color: #1e40af; }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Microphone Test</h1>
+        
+        <div id="status" class="status info">
+            Click "Test Microphone" to check if your mic is working
+        </div>
+
+        <label for="micSelect"><strong>Select Microphone:</strong></label>
+        <select id="micSelect"></select>
+
+        <button onclick="testMicrophone()">🎤 Test Microphone</button>
+        <button onclick="testVoiceRecognition()">🗣️ Test Voice Recognition</button>
+
+        <div id="volumeBar">
+            <div id="volumeLevel"></div>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let audioContext;
+        let analyser;
+        let microphone;
+        let javascriptNode;
+
+        // Get available microphones
+        async function getMicrophones() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const audioInputs = devices.filter(device => device.kind === 'audioinput');
+                
+                const select = document.getElementById('micSelect');
+                select.innerHTML = '';
+                
+                audioInputs.forEach((device, index) => {
+                    const option = document.createElement('option');
+                    option.value = device.deviceId;
+                    option.text = device.label || `Microphone ${index + 1}`;
+                    select.appendChild(option);
+                });
+
+                if (audioInputs.length === 0) {
+                    updateStatus('❌ No microphones found!', 'error');
+                } else {
+                    updateStatus(`✅ Found ${audioInputs.length} microphone(s)`, 'success');
+                }
+            } catch (error) {
+                updateStatus('❌ Error accessing microphones: ' + error.message, 'error');
+            }
+        }
+
+        function updateStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = 'status ' + type;
+        }
+
+        async function testMicrophone() {
+            try {
+                const selectedMic = document.getElementById('micSelect').value;
+                const constraints = {
+                    audio: selectedMic ? { deviceId: { exact: selectedMic } } : true
+                };
+
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                
+                updateStatus('✅ Microphone access granted! Speak to see volume...', 'success');
+
+                // Create audio context
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                microphone = audioContext.createMediaStreamSource(stream);
+                javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+
+                analyser.smoothingTimeConstant = 0.8;
+                analyser.fftSize = 1024;
+
+                microphone.connect(analyser);
+                analyser.connect(javascriptNode);
+                javascriptNode.connect(audioContext.destination);
+
+                javascriptNode.onaudioprocess = function() {
+                    const array = new Uint8Array(analyser.frequencyBinCount);
+                    analyser.getByteFrequencyData(array);
+                    const values = array.reduce((a, b) => a + b, 0);
+                    const average = values / array.length;
+                    
+                    // Update volume bar
+                    const volumeLevel = document.getElementById('volumeLevel');
+                    volumeLevel.style.width = Math.min(average * 2, 100) + '%';
+                    
+                    if (average > 10) {
+                        updateStatus('✅ Microphone is working! Volume: ' + Math.round(average), 'success');
+                    }
+                };
+
+                // Stop after 10 seconds
+                setTimeout(() => {
+                    stream.getTracks().forEach(track => track.stop());
+                    if (audioContext) audioContext.close();
+                    updateStatus('Test complete. If you saw the volume bar move, your mic works!', 'info');
+                }, 10000);
+
+            } catch (error) {
+                updateStatus('❌ Microphone error: ' + error.message, 'error');
+                console.error('Microphone error:', error);
+            }
+        }
+
+        function testVoiceRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                updateStatus('❌ Voice recognition not supported', 'error');
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+
+            updateStatus('🎤 Listening for 10 seconds... Speak now!', 'info');
+
+            let hasHeardSomething = false;
+
+            recognition.onresult = (event) => {
+                hasHeardSomething = true;
+                let transcript = '';
+                for (let i = 0; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                document.getElementById('result').innerHTML = 
+                    `<div class="status success"><strong>Heard:</strong> "${transcript}"</div>`;
+            };
+
+            recognition.onerror = (event) => {
+                if (event.error === 'no-speech') {
+                    updateStatus('❌ No speech detected. Try speaking louder or closer to mic.', 'error');
+                } else {
+                    updateStatus('❌ Error: ' + event.error, 'error');
+                }
+            };
+
+            recognition.onend = () => {
+                if (!hasHeardSomething) {
+                    updateStatus('❌ No speech detected. Check microphone volume!', 'error');
+                }
+            };
+
+            recognition.start();
+
+            // Stop after 10 seconds
+            setTimeout(() => {
+                recognition.stop();
+            }, 10000);
+        }
+
+        // Load microphones on page load
+        window.onload = () => {
+            getMicrophones();
+        };
+    </script>
+</body>
+</html>

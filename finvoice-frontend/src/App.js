@@ -7,6 +7,7 @@ import Dashboard from "./components/dashboard.js";
 import BalanceSheet from "./components/balancesheet.js";
 import PayableAlerts from "./components/payable-alerts.js";
 import Profile from "./components/profile.js";
+import FloatingVoiceButton from "./components/FloatingVoiceButton.js";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -57,6 +58,11 @@ function App() {
     }
   };
 
+  const handleRefresh = () => {
+    // Trigger refresh based on current view
+    window.location.reload();
+  };
+
   return (
     <div className="app-container">
       <nav className="navbar">
@@ -92,6 +98,7 @@ function App() {
         </div>
       </nav>
       {renderView()}
+      <FloatingVoiceButton onRefresh={handleRefresh} />
     </div>
   );
 }

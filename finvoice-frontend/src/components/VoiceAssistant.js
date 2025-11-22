@@ -20,7 +20,6 @@ function VoiceAssistant({ onRefresh }) {
     try {
       const token = localStorage.getItem("token");
 
-      // Determine command type
       if (
         lowerText.includes("add") ||
         lowerText.includes("expense") ||
@@ -29,7 +28,6 @@ function VoiceAssistant({ onRefresh }) {
         lowerText.includes("earned") ||
         lowerText.includes("received")
       ) {
-        // Transaction command
         const parsed = parseTransactionVoice(text);
 
         if (!parsed.amount) {
@@ -61,7 +59,6 @@ function VoiceAssistant({ onRefresh }) {
         lowerText.includes("payment") ||
         lowerText.includes("due")
       ) {
-        // Alert command
         const parsed = parseAlertVoice(text);
 
         if (!parsed.amount) {
@@ -95,7 +92,7 @@ function VoiceAssistant({ onRefresh }) {
         );
       } else {
         setMessage(
-          "❓ I didn't understand that. Try: 'Add expense 500 for food' or 'Remind me rent payment 15000 next week'"
+          "❓ Try: 'Add expense 500 for food' or 'Remind me rent payment 15000 next week'"
         );
       }
     } catch (err) {
@@ -110,88 +107,112 @@ function VoiceAssistant({ onRefresh }) {
   if (!isSupported) {
     return (
       <div className="voice-assistant">
-        <p style={{ color: "#999", fontSize: "14px" }}>
-          Voice input not supported in this browser. Try Chrome, Edge, or Safari.
-        </p>
+        <div className="voice-card">
+          <p style={{ color: "var(--gray-500)", fontSize: "14px", margin: 0 }}>
+            Voice input not supported in this browser. Try Chrome, Edge, or Safari.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="voice-assistant">
-      <div
-        style={{
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          padding: "20px",
-          borderRadius: "15px",
-          color: "white",
-          marginBottom: "20px",
-        }}
-      >
-        <h3 style={{ margin: "0 0 15px 0", fontSize: "18px" }}>
-          🎤 Voice Assistant
-        </h3>
+      <div className="voice-card">
+        <h3>🎤 Voice Assistant</h3>
 
         <button
-          onClick={startListening}
-          disabled={isListening || processing}
-          style={{
-            padding: "15px 30px",
-            background: isListening ? "#e74c3c" : "white",
-            color: isListening ? "white" : "#667eea",
-            border: "none",
-            borderRadius: "10px",
-            cursor: isListening || processing ? "not-allowed" : "pointer",
-            fontSize: "16px",
-            fontWeight: "bold",
-            width: "100%",
-            transition: "all 0.3s",
-            opacity: processing ? 0.6 : 1,
+          onClick={() => {
+            console.log('Voice button clicked');
+            startListening();
           }}
+          disabled={isListening || processing}
+          className={`voice-btn ${isListening ? "listening" : ""}`}
         >
-          {processing
-            ? "⏳ Processing..."
-            : isListening
-            ? "🎤 Listening... Speak now!"
-            : "🎤 Click to Speak"}
+          {processing ? (
+            <>⏳ Processing...</>
+          ) : isListening ? (
+            <>🔴 Listening... Speak clearly!</>
+          ) : (
+            <>🎤 Click & Speak</>
+          )}
         </button>
 
         <div
           style={{
-            marginTop: "15px",
-            padding: "10px",
-            background: "rgba(255,255,255,0.2)",
+            marginTop: "16px",
+            padding: "16px",
+            background: isListening ? "#fef3c7" : "var(--gray-50)",
             borderRadius: "8px",
-            minHeight: "60px",
+            minHeight: "80px",
+            border: isListening ? "2px solid #f59e0b" : "1px solid var(--gray-200)",
+            transition: "all 0.3s",
           }}
         >
+          {isListening && (
+            <p
+              style={{
+                margin: "0 0 8px 0",
+                fontSize: "14px",
+                color: "#92400e",
+                fontWeight: "600",
+                animation: "pulse 1.5s infinite",
+              }}
+            >
+              🎤 Listening... Speak now! (e.g., "Add expense 500 for food")
+            </p>
+          )}
           {transcript && (
-            <p style={{ margin: "0 0 8px 0", fontSize: "14px" }}>
+            <p
+              style={{
+                margin: "0 0 8px 0",
+                fontSize: "14px",
+                color: "var(--gray-700)",
+              }}
+            >
               <strong>You said:</strong> "{transcript}"
             </p>
           )}
           {message && (
-            <p style={{ margin: "0", fontSize: "14px", fontWeight: "bold" }}>
+            <p
+              style={{
+                margin: "0",
+                fontSize: "14px",
+                fontWeight: "600",
+                color: message.includes("✅")
+                  ? "var(--success)"
+                  : message.includes("❌")
+                  ? "var(--danger)"
+                  : "var(--gray-700)",
+              }}
+            >
               {message}
             </p>
           )}
-          {!transcript && !message && (
+          {!transcript && !message && !isListening && (
             <div>
-              <p style={{ margin: "0 0 8px 0", fontSize: "13px" }}>
-                <strong>Try saying:</strong>
+              <p
+                style={{
+                  margin: "0 0 12px 0",
+                  fontSize: "13px",
+                  fontWeight: "600",
+                  color: "var(--gray-700)",
+                }}
+              >
+                💡 Try saying:
               </p>
               <ul
                 style={{
                   margin: "0",
                   paddingLeft: "20px",
-                  fontSize: "12px",
-                  lineHeight: "1.6",
+                  fontSize: "13px",
+                  lineHeight: "1.8",
+                  color: "var(--gray-600)",
                 }}
               >
                 <li>"Add expense 500 rupees for food"</li>
                 <li>"Income 5000 salary"</li>
                 <li>"Remind me rent payment 15000 next week"</li>
-                <li>"Alert credit card 5000 tomorrow"</li>
               </ul>
             </div>
           )}

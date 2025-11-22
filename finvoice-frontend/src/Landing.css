@@ -1,3 +1,12 @@
+/* Landing Page Color Variables */
+:root {
+  --navy-blue: #1B263B;
+  --teal: #71C7B8;
+  --soft-green: #A8DADC;
+  --off-white: #F7F9FA;
+  --white: #FFFFFF;
+}
+
 .landing-page {
   min-height: 100vh;
   background: var(--off-white);
