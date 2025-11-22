@@ -1,28 +1,54 @@
 import express from "express";
-import jwt from "jsonwebtoken";
+import Transaction from "../models/transaction.js";
+import { authMiddleware } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-// Example protected route
-router.get("/", (req, res) => {
+// Get balance sheet data with time filter
+router.get("/", authMiddleware, async (req, res) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return res.status(401).json({ msg: "No token, authorization denied" });
+    const { period } = req.query; // week, month, 6months, year
+    
+    let startDate = new Date();
+    switch (period) {
+      case "week":
+        startDate.setDate(startDate.getDate() - 7);
+        break;
+      case "month":
+        startDate.setMonth(startDate.getMonth() - 1);
+        break;
+      case "6months":
+        startDate.setMonth(startDate.getMonth() - 6);
+        break;
+      case "year":
+        startDate.setFullYear(startDate.getFullYear() - 1);
+        break;
+      default:
+        startDate = new Date(0); // All time
     }
 
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const transactions = await Transaction.find({
+      userId: req.userId,
+      date: { $gte: startDate },
+    });
 
-    // Dummy data for testing
-    const balanceData = {
-      totalIncome: 12000,
-      totalExpense: 8000,
-      profit: 4000,
-      userId: decoded.id,
-    };
+    const totalIncome = transactions
+      .filter((t) => t.type === "income")
+      .reduce((sum, t) => sum + t.amount, 0);
 
-    res.json(balanceData);
+    const totalExpense = transactions
+      .filter((t) => t.type === "expense")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const profit = totalIncome - totalExpense;
+
+    res.json({
+      totalIncome,
+      totalExpense,
+      profit,
+      transactionCount: transactions.length,
+      period: period || "all",
+    });
   } catch (err) {
     console.error("BalanceSheet Error:", err.message);
     res.status(500).json({ msg: "Server error", error: err.message });

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import "./App.css";
+import Landing from "./components/landing.js";
 import Login from "./components/login.js";
 import Register from "./components/register.js";
 import Dashboard from "./components/dashboard.js";
@@ -10,11 +12,21 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [view, setView] = useState("dashboard");
   const [showRegister, setShowRegister] = useState(false);
+  const [showLanding, setShowLanding] = useState(!localStorage.getItem("token"));
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
+    setShowLanding(true);
   };
+
+  const handleGetStarted = () => {
+    setShowLanding(false);
+  };
+
+  if (showLanding && !isLoggedIn) {
+    return <Landing onGetStarted={handleGetStarted} />;
+  }
 
   if (!isLoggedIn) {
     return showRegister ? (
@@ -46,13 +58,38 @@ function App() {
   };
 
   return (
-    <div>
-      <nav style={{ marginBottom: "20px" }}>
-        <button onClick={() => setView("dashboard")}>Dashboard</button>
-        <button onClick={() => setView("balance")}>Balance Sheet</button>
-        <button onClick={() => setView("alerts")}>Payable Alerts</button>
-        <button onClick={() => setView("profile")}>Profile</button>
-        <button onClick={handleLogout}>Logout</button>
+    <div className="app-container">
+      <nav className="navbar">
+        <h1>💼 FinVoice.AI</h1>
+        <div className="nav-buttons">
+          <button 
+            className={`nav-btn ${view === "dashboard" ? "active" : ""}`}
+            onClick={() => setView("dashboard")}
+          >
+            Dashboard
+          </button>
+          <button 
+            className={`nav-btn ${view === "balance" ? "active" : ""}`}
+            onClick={() => setView("balance")}
+          >
+            Balance Sheet
+          </button>
+          <button 
+            className={`nav-btn ${view === "alerts" ? "active" : ""}`}
+            onClick={() => setView("alerts")}
+          >
+            Payable Alerts
+          </button>
+          <button 
+            className={`nav-btn ${view === "profile" ? "active" : ""}`}
+            onClick={() => setView("profile")}
+          >
+            Profile
+          </button>
+          <button className="nav-btn logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </nav>
       {renderView()}
     </div>

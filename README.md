@@ -18,12 +18,14 @@ It includes a storytelling interface, user authentication, and a dashboard that 
 
 ## 🚀 Features
 
-- 🔐 **Secure Login/Signup** system  
-- 📊 **Interactive Dashboard**  
-- 📘 **Balance Sheet Overview**  
-- 🔔 **Payable Alerts**  
-- 💳 **Subscription Management**  
-- 👤 **Profile Page** with stored user details  
+- 🔐 **Secure Authentication** - JWT-based login/signup with bcrypt password hashing
+- 📊 **Smart Dashboard** - Real-time overview of income, expenses, and balance
+- 💰 **Transaction Management** - Add, view, and delete income/expense entries
+- 📘 **Dynamic Balance Sheet** - Filter by week, month, 6 months, year, or all time
+- 🔔 **Payable Alerts** - Set reminders for rent, loans, bills with due dates
+- ✅ **Payment Tracking** - Mark alerts as paid and track payment history
+- 👤 **Profile Management** - Update personal info, occupation, and company details
+- 🎨 **Modern UI** - Clean, responsive design with gradient themes  
 
 ---
 
@@ -31,43 +33,62 @@ It includes a storytelling interface, user authentication, and a dashboard that 
 
 | Layer | Technology |
 |-------|-------------|
-| **Frontend** | React, JavaScript, CSS |
-| **Backend (Planned)** | Flask (Python) |
-| **Database (Planned)** | MySQL or SQLite |
+| **Frontend** | React 19, Modern CSS, React Router |
+| **Backend** | Node.js, Express.js |
+| **Database** | MongoDB Atlas (Cloud) |
+| **Authentication** | JWT + bcrypt |
 | **Version Control** | Git + GitHub |
 
 ## ⚙️ Setup and Run Locally
 
-### 1️⃣ Clone the Repository
+### Backend Setup
 
-git clone https://github.com/MrAniketPatel/finvoice-ai.git
-cd finvoice-ai/finvoice-frontend
-2️⃣ Install Dependencies
-bash
-Copy code
+```bash
+cd finvoice-backend
 npm install
-3️⃣ Start the Development Server
-bash
-Copy code
 npm start
-4️⃣ Access the App
-Open your browser and visit 👉 http://localhost:3000
+```
+
+Backend runs on `http://localhost:5000`
+
+### Frontend Setup (in a new terminal)
+
+```bash
+cd finvoice-frontend
+npm install
+npm start
+```
+
+Frontend opens automatically at `http://localhost:3000`
+
+### Quick API Test
+
+```bash
+cd finvoice-backend
+node test-api.js
+```
+
+### Demo Preparation
+
+See `DEMO_SETUP.md` for detailed demo instructions and `TESTING_CHECKLIST.md` for pre-demo testing.
 
 🤝 Contributors
 Name	Role
 Aniket Patel	Lead Developer
 [Friend’s Name]	Collaborator / Frontend Developer
 
-🌱 Future Enhancements
-✅ Integrate Flask backend
+## 🌱 Future Enhancements
 
-✅ Store login credentials in a database
-
-⚙️ Add JWT authentication
-
-📈 Add AI-based finance insights
-
-📅 Export balance sheet as PDF
+- 🎤 Voice input for transactions (AI-powered)
+- 🤖 AI-based financial insights and recommendations
+- 📊 Advanced charts and data visualizations
+- 📱 Mobile app (React Native)
+- 📧 Email/SMS notifications for due payments
+- 📄 PDF export for balance sheets and reports
+- 💱 Multiple currency support
+- 🔄 Recurring transaction automation
+- 📈 Budget planning and forecasting
+- 🔗 Bank account integration
 
 📜 License
 This project is private and licensed for educational and developmental purposes only.
