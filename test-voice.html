@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Test - FinVoice.AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f7f9fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1B263B;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #1B263B, #71C7B8);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .status.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .transcript {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 60px;
+            margin-top: 15px;
+        }
+        .instructions {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Voice Recognition Test</h1>
+        
+        <div id="status" class="status info">
+            Click the button below to test voice recognition
+        </div>
+
+        <button id="startBtn" onclick="startVoiceTest()">
+            🎤 Click to Test Voice
+        </button>
+
+        <div class="transcript">
+            <strong>Transcript will appear here...</strong>
+            <p id="transcript"></p>
+        </div>
+
+        <div class="instructions">
+            <strong>Instructions:</strong><br>
+            1. Click the button above<br>
+            2. Allow microphone access when prompted<br>
+            3. Speak clearly: "Add expense 500 rupees for food"<br>
+            4. Check if your speech is captured below
+        </div>
+    </div>
+
+    <script>
+        function updateStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = 'status ' + type;
+        }
+
+        function startVoiceTest() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (!SpeechRecognition) {
+                updateStatus('❌ Voice recognition not supported in this browser. Try Chrome, Edge, or Safari.', 'error');
+                return;
+            }
+
+            updateStatus('✅ Voice recognition is supported!', 'success');
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-IN';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            const startBtn = document.getElementById('startBtn');
+            startBtn.disabled = true;
+            startBtn.textContent = '🎤 Listening... Speak now!';
+            updateStatus('🎤 Listening... Speak now!', 'info');
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                const confidence = event.results[0][0].confidence;
+                
+                document.getElementById('transcript').innerHTML = `
+                    <strong>You said:</strong> "${transcript}"<br>
+                    <strong>Confidence:</strong> ${(confidence * 100).toFixed(1)}%
+                `;
+                
+                updateStatus('✅ Voice captured successfully!', 'success');
+                startBtn.disabled = false;
+                startBtn.textContent = '🎤 Click to Test Voice Again';
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                let errorMsg = '❌ Error: ';
+                
+                switch(event.error) {
+                    case 'no-speech':
+                        errorMsg += 'No speech detected. Please try again.';
+                        break;
+                    case 'audio-capture':
+                        errorMsg += 'Microphone not found or not working.';
+                        break;
+                    case 'not-allowed':
+                        errorMsg += 'Microphone permission denied. Please allow access.';
+                        break;
+                    default:
+                        errorMsg += event.error;
+                }
+                
+                updateStatus(errorMsg, 'error');
+                startBtn.disabled = false;
+                startBtn.textContent = '🎤 Click to Test Voice';
+            };
+
+            recognition.onend = () => {
+                startBtn.disabled = false;
+                if (startBtn.textContent.includes('Listening')) {
+                    startBtn.textContent = '🎤 Click to Test Voice';
+                    updateStatus('⚠️ No speech detected. Click to try again.', 'error');
+                }
+            };
+
+            try {
+                recognition.start();
+            } catch (error) {
+                updateStatus('❌ Error starting voice recognition: ' + error.message, 'error');
+                startBtn.disabled = false;
+                startBtn.textContent = '🎤 Click to Test Voice';
+            }
+        }
+
+        // Check support on page load
+        window.onload = () => {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                updateStatus('❌ Voice recognition NOT supported in this browser', 'error');
+                document.getElementById('startBtn').disabled = true;
+            } else {
+                updateStatus('✅ Voice recognition is supported! Click button to test.', 'success');
+            }
+        };
+    </script>
+</body>
+</html>
