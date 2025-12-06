@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Landing from "./components/landing.js";
 import Login from "./components/login.js";
@@ -8,37 +8,61 @@ import BalanceSheet from "./components/balancesheet.js";
 import PayableAlerts from "./components/payable-alerts.js";
 import Profile from "./components/profile.js";
 import FloatingVoiceButton from "./components/FloatingVoiceButton.js";
+// Navigation removed - using inline navbar
+import useAlerts from "./hooks/useAlerts.js";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [view, setView] = useState("dashboard");
   const [showRegister, setShowRegister] = useState(false);
-  const [showLanding, setShowLanding] = useState(!localStorage.getItem("token"));
+  const [showLanding, setShowLanding] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { pendingCount, overdueCount, dueSoonCount, requestNotificationPermission } = useAlerts();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
-    setShowLanding(true);
+    setShowLanding(false);
   };
 
   const handleGetStarted = () => {
     setShowLanding(false);
   };
 
-  if (showLanding && !isLoggedIn) {
-    return <Landing onGetStarted={handleGetStarted} />;
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+  };
+
+  // Request notification permission when logged in
+  useEffect(() => {
+    if (isLoggedIn) {
+      requestNotificationPermission();
+    }
+  }, [isLoggedIn, requestNotificationPermission]);
+
+  // Show landing page if not logged in and not on login/register
+  if (!isLoggedIn && !showLanding) {
+    return (
+      <Landing 
+        onGetStarted={handleGetStarted}
+        onLogin={() => setShowLanding(true)}
+      />
+    );
   }
 
-  if (!isLoggedIn) {
+  // Show login/register
+  if (!isLoggedIn && showLanding) {
     return showRegister ? (
       <Register
         onRegisterSuccess={() => setShowRegister(false)}
         switchToLogin={() => setShowRegister(false)}
+        onBack={() => setShowLanding(false)}
       />
     ) : (
       <Login
-        onLoginSuccess={() => setIsLoggedIn(true)}
+        onLoginSuccess={handleLoginSuccess}
         switchToRegister={() => setShowRegister(true)}
+        onBack={() => setShowLanding(false)}
       />
     );
   }
@@ -65,8 +89,11 @@ function App() {
 
   return (
     <div className="app-container">
+      {/* Navigation Bar */}
       <nav className="navbar">
         <h1>💼 FinVoice.AI</h1>
+        
+        {/* Desktop Navigation */}
         <div className="nav-buttons">
           <button 
             className={`nav-btn ${view === "dashboard" ? "active" : ""}`}
@@ -83,8 +110,29 @@ function App() {
           <button 
             className={`nav-btn ${view === "alerts" ? "active" : ""}`}
             onClick={() => setView("alerts")}
+            style={{ position: 'relative' }}
           >
             Payable Alerts
+            {pendingCount > 0 && (
+              <span className="alert-badge" style={{
+                position: 'absolute',
+                top: '-8px',
+                right: '-8px',
+                background: overdueCount > 0 ? '#ef4444' : '#f59e0b',
+                color: 'white',
+                borderRadius: '50%',
+                width: '24px',
+                height: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                border: '2px solid white',
+              }}>
+                {pendingCount}
+              </span>
+            )}
           </button>
           <button 
             className={`nav-btn ${view === "profile" ? "active" : ""}`}
@@ -96,9 +144,133 @@ function App() {
             Logout
           </button>
         </div>
+
+        {/* Mobile Hamburger */}
+        <button 
+          className="mobile-hamburger"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <span className={isMobileMenuOpen ? 'active' : ''}></span>
+          <span className={isMobileMenuOpen ? 'active' : ''}></span>
+          <span className={isMobileMenuOpen ? 'active' : ''}></span>
+        </button>
       </nav>
-      {renderView()}
-      <FloatingVoiceButton onRefresh={handleRefresh} />
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <>
+          <div className="mobile-menu-overlay" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="mobile-menu">
+            <button 
+              className={`mobile-menu-item ${view === "dashboard" ? "active" : ""}`}
+              onClick={() => { setView("dashboard"); setIsMobileMenuOpen(false); }}
+            >
+              📊 Dashboard
+            </button>
+            <button 
+              className={`mobile-menu-item ${view === "balance" ? "active" : ""}`}
+              onClick={() => { setView("balance"); setIsMobileMenuOpen(false); }}
+            >
+              💰 Balance Sheet
+            </button>
+            <button 
+              className={`mobile-menu-item ${view === "alerts" ? "active" : ""}`}
+              onClick={() => { setView("alerts"); setIsMobileMenuOpen(false); }}
+            >
+              🔔 Payable Alerts
+              {pendingCount > 0 && (
+                <span style={{
+                  marginLeft: 'auto',
+                  background: overdueCount > 0 ? '#ef4444' : '#f59e0b',
+                  color: 'white',
+                  borderRadius: '12px',
+                  padding: '2px 8px',
+                  fontSize: '12px',
+                  fontWeight: 'bold',
+                }}>
+                  {pendingCount}
+                </span>
+              )}
+            </button>
+            <button 
+              className={`mobile-menu-item ${view === "profile" ? "active" : ""}`}
+              onClick={() => { setView("profile"); setIsMobileMenuOpen(false); }}
+            >
+              👤 Profile
+            </button>
+            <button 
+              className="mobile-menu-item logout"
+              onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
+            >
+              🚪 Logout
+            </button>
+          </div>
+        </>
+      )}
+      
+      <div className="main-content-area">
+        {overdueCount > 0 && (
+          <div className="notification-banner" style={{
+            background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+            color: 'white',
+            padding: '12px 24px',
+            textAlign: 'center',
+            fontWeight: '600',
+            fontSize: '14px',
+            boxShadow: '0 2px 8px rgba(239, 68, 68, 0.3)',
+          }}>
+            ⚠️ You have {overdueCount} overdue payment{overdueCount > 1 ? 's' : ''}! 
+            <button 
+              onClick={() => setView('alerts')}
+              style={{
+                marginLeft: '12px',
+                background: 'white',
+                color: '#ef4444',
+                border: 'none',
+                padding: '6px 16px',
+                borderRadius: '6px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                fontSize: '13px',
+              }}
+            >
+              View Now
+            </button>
+          </div>
+        )}
+        {dueSoonCount > 0 && overdueCount === 0 && (
+          <div className="notification-banner" style={{
+            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+            color: 'white',
+            padding: '12px 24px',
+            textAlign: 'center',
+            fontWeight: '600',
+            fontSize: '14px',
+            boxShadow: '0 2px 8px rgba(245, 158, 11, 0.3)',
+          }}>
+            📅 {dueSoonCount} payment{dueSoonCount > 1 ? 's' : ''} due in the next 3 days
+            <button 
+              onClick={() => setView('alerts')}
+              style={{
+                marginLeft: '12px',
+                background: 'white',
+                color: '#f59e0b',
+                border: 'none',
+                padding: '6px 16px',
+                borderRadius: '6px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                fontSize: '13px',
+              }}
+            >
+              View Alerts
+            </button>
+          </div>
+        )}
+        
+        {renderView()}
+        <FloatingVoiceButton onRefresh={handleRefresh} />
+      </div>
     </div>
   );
 }

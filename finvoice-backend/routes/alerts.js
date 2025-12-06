@@ -37,7 +37,7 @@ router.post("/", authMiddleware, async (req, res) => {
 // Update alert status
 router.patch("/:id", authMiddleware, async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status, addAsExpense } = req.body;
     const alert = await Alert.findOneAndUpdate(
       { _id: req.params.id, userId: req.userId },
       { status },
@@ -46,6 +46,19 @@ router.patch("/:id", authMiddleware, async (req, res) => {
 
     if (!alert) {
       return res.status(404).json({ msg: "Alert not found" });
+    }
+
+    // If marking as paid and user wants to add as expense
+    if (status === "paid" && addAsExpense) {
+      const Transaction = require("../models/transaction.js").default;
+      await Transaction.create({
+        userId: req.userId,
+        type: "expense",
+        amount: alert.amount,
+        category: alert.category,
+        description: `Payment: ${alert.title}`,
+        date: new Date(),
+      });
     }
 
     res.json(alert);

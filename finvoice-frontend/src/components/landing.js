@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "../Landing.css";
 
-function Landing({ onGetStarted }) {
+function Landing({ onGetStarted, onLogin }) {
   useEffect(() => {
     // Scroll reveal animation
     const observerOptions = {
@@ -40,6 +40,17 @@ function Landing({ onGetStarted }) {
           <div className="hero-buttons reveal">
             <button className="cta-button" onClick={onGetStarted}>
               Get Started — It's Free
+            </button>
+            <button 
+              className="cta-button-secondary" 
+              onClick={onLogin}
+              style={{
+                background: 'white',
+                color: 'var(--navy-blue)',
+                border: '2px solid var(--navy-blue)',
+              }}
+            >
+              Login
             </button>
           </div>
         </div>

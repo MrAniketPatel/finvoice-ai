@@ -508,16 +508,41 @@
 }
 
 @media (max-width: 768px) {
+  .hero-section {
+    padding: 40px 20px;
+    min-height: auto;
+  }
+
   .hero-title {
-    font-size: 38px;
+    font-size: 32px;
+    margin-bottom: 20px;
   }
 
   .hero-subtitle {
     font-size: 16px;
+    margin-bottom: 30px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .cta-button,
+  .cta-button-secondary {
+    width: 100%;
+    padding: 16px 32px;
+    font-size: 16px;
+  }
+
+  /* Hide floating cards on mobile - they cause overlap */
+  .hero-visual {
+    display: none;
   }
 
   .story-title {
-    font-size: 32px;
+    font-size: 28px;
   }
 
   .story-text {
@@ -525,15 +550,15 @@
   }
 
   .section-title {
-    font-size: 32px;
+    font-size: 28px;
   }
 
   .testimonial-quote {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .cta-content h2 {
-    font-size: 32px;
+    font-size: 28px;
   }
 
   .features-section,
@@ -541,20 +566,21 @@
   .cta-section,
   .story-section,
   .testimonial-section {
-    padding: 60px 30px;
+    padding: 50px 20px;
   }
 
-  .floating-card {
-    padding: 15px;
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .feature-card {
+    padding: 30px 20px;
+  }
+
+  .hero-badge {
     font-size: 12px;
-  }
-
-  .card-icon {
-    font-size: 24px;
-  }
-
-  .card-value {
-    font-size: 18px;
+    padding: 8px 16px;
   }
 }
 

@@ -11,6 +11,7 @@ function VoiceAssistant({ onRefresh }) {
     if (transcript && !processing) {
       handleVoiceCommand(transcript);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transcript]);
 
   const handleVoiceCommand = async (text) => {
@@ -142,10 +143,10 @@ function VoiceAssistant({ onRefresh }) {
           style={{
             marginTop: "16px",
             padding: "16px",
-            background: isListening ? "#fef3c7" : "var(--gray-50)",
+            background: isListening ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 255, 255, 0.2)",
             borderRadius: "8px",
             minHeight: "80px",
-            border: isListening ? "2px solid #f59e0b" : "1px solid var(--gray-200)",
+            border: isListening ? "2px solid var(--white)" : "1px solid rgba(255, 255, 255, 0.3)",
             transition: "all 0.3s",
           }}
         >
@@ -154,8 +155,8 @@ function VoiceAssistant({ onRefresh }) {
               style={{
                 margin: "0 0 8px 0",
                 fontSize: "14px",
-                color: "#92400e",
-                fontWeight: "600",
+                color: "var(--white)",
+                fontWeight: "700",
                 animation: "pulse 1.5s infinite",
               }}
             >
@@ -167,7 +168,8 @@ function VoiceAssistant({ onRefresh }) {
               style={{
                 margin: "0 0 8px 0",
                 fontSize: "14px",
-                color: "var(--gray-700)",
+                color: "var(--white)",
+                fontWeight: "600",
               }}
             >
               <strong>You said:</strong> "{transcript}"
@@ -178,12 +180,8 @@ function VoiceAssistant({ onRefresh }) {
               style={{
                 margin: "0",
                 fontSize: "14px",
-                fontWeight: "600",
-                color: message.includes("✅")
-                  ? "var(--success)"
-                  : message.includes("❌")
-                  ? "var(--danger)"
-                  : "var(--gray-700)",
+                fontWeight: "700",
+                color: "var(--white)",
               }}
             >
               {message}
@@ -195,8 +193,8 @@ function VoiceAssistant({ onRefresh }) {
                 style={{
                   margin: "0 0 12px 0",
                   fontSize: "13px",
-                  fontWeight: "600",
-                  color: "var(--gray-700)",
+                  fontWeight: "700",
+                  color: "var(--white)",
                 }}
               >
                 💡 Try saying:
@@ -207,7 +205,7 @@ function VoiceAssistant({ onRefresh }) {
                   paddingLeft: "20px",
                   fontSize: "13px",
                   lineHeight: "1.8",
-                  color: "var(--gray-600)",
+                  color: "rgba(255, 255, 255, 0.9)",
                 }}
               >
                 <li>"Add expense 500 rupees for food"</li>
