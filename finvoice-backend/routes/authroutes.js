@@ -2,11 +2,13 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
+import { authLimiter } from "../middlewares/rateLimiter.js";
+import { signupValidation, loginValidation, validate } from "../middlewares/validators.js";
 
 const router = express.Router();
 
 // Signup
-router.post("/signup", async (req, res) => {
+router.post("/signup", authLimiter, signupValidation, validate, async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -26,7 +28,7 @@ router.post("/signup", async (req, res) => {
 });
 
 // Login
-router.post("/login", async (req, res) => {
+router.post("/login", authLimiter, loginValidation, validate, async (req, res) => {
   try {
     const { email, password } = req.body;
 

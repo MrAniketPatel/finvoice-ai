@@ -8,24 +8,51 @@ import balanceSheetRoutes from "./routes/balancesheet.js";
 import transactionRoutes from "./routes/transactions.js";
 import alertRoutes from "./routes/alerts.js";
 import profileRoutes from "./routes/profile.js";
+import { apiLimiter } from "./middlewares/rateLimiter.js";
 
 dotenv.config();
 
 const app = express();
 
+// Security headers
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  next();
+});
+
 // ✅ Allow requests from your frontend
+const allowedOrigins = [
+  "http://localhost:3000", // Local development
+  "https://mraniketpatel.github.io", // Production frontend
+];
+
 app.use(
   cors({
-    origin: "http://localhost:3000", // React frontend
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
     credentials: true,
   })
 );
 
 // Middleware
-app.use(express.json());
+app.use(express.json({ limit: "10mb" })); // Limit payload size
 
 // Connect DB
 connectDB();
+
+// Apply rate limiting to all API routes
+app.use("/api/", apiLimiter);
 
 // Routes
 app.use("/api/auth", authroutes);
