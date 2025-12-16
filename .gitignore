@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Dependencies
 node_modules/
 */node_modules/
@@ -13,13 +14,30 @@ build/
 dist/
 */build/
 */dist/
+=======
+# Environment variables
+finvoice-backend/.env
+finvoice-frontend/.env
+
+# Dependencies
+node_modules/
+finvoice-backend/node_modules/
+finvoice-frontend/node_modules/
+
+# Build files
+finvoice-frontend/build/
+dist/
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
 
 # Logs
 *.log
 npm-debug.log*
+<<<<<<< HEAD
 yarn-debug.log*
 yarn-error.log*
 logs/
+=======
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
 
 # OS files
 .DS_Store
@@ -28,6 +46,7 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+<<<<<<< HEAD
 *.swp
 *.swo
 
@@ -38,3 +57,5 @@ coverage/
 .cache/
 temp/
 tmp/
+=======
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)

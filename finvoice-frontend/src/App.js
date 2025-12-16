@@ -9,6 +9,12 @@ import PayableAlerts from "./components/payable-alerts.js";
 import Profile from "./components/profile.js";
 import FloatingVoiceButton from "./components/FloatingVoiceButton.js";
 import SubscriptionPage from "./components/SubscriptionPage.js";
+<<<<<<< HEAD
+=======
+import PrivacyPolicy from "./components/PrivacyPolicy.js";
+import TermsOfService from "./components/TermsOfService.js";
+import Contact from "./components/Contact.js";
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
 // Navigation removed - using inline navbar
 import useAlerts from "./hooks/useAlerts.js";
 
@@ -17,6 +23,10 @@ function App() {
   const [view, setView] = useState("dashboard");
   const [showRegister, setShowRegister] = useState(false);
   const [showLanding, setShowLanding] = useState(false);
+<<<<<<< HEAD
+=======
+  const [legalPage, setLegalPage] = useState(null);
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { pendingCount, overdueCount, dueSoonCount, requestNotificationPermission } = useAlerts();
 
@@ -27,11 +37,31 @@ function App() {
   };
 
   const handleGetStarted = () => {
+<<<<<<< HEAD
     setShowLanding(false);
+=======
+    setShowLanding(true);
+    setShowRegister(true);
+    setLegalPage(null);
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
   };
 
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);
+<<<<<<< HEAD
+=======
+    setLegalPage(null);
+  };
+
+  const handleNavigate = (page) => {
+    setLegalPage(page);
+    setShowLanding(false);
+  };
+
+  const handleBackToLanding = () => {
+    setLegalPage(null);
+    setShowLanding(false);
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
   };
 
   // Request notification permission when logged in
@@ -41,12 +71,39 @@ function App() {
     }
   }, [isLoggedIn, requestNotificationPermission]);
 
+<<<<<<< HEAD
+=======
+  // Show legal pages
+  if (legalPage) {
+    return (
+      <div className="app-container">
+        <nav className="navbar">
+          <div className="navbar-logo" onClick={handleBackToLanding} style={{ cursor: 'pointer' }}>
+            <div className="logo-icon">F</div>
+            <h1>FinVoiceAI</h1>
+          </div>
+          <button className="nav-btn" onClick={handleBackToLanding}>
+            ← Back to Home
+          </button>
+        </nav>
+        {legalPage === 'privacy' && <PrivacyPolicy />}
+        {legalPage === 'terms' && <TermsOfService />}
+        {legalPage === 'contact' && <Contact />}
+      </div>
+    );
+  }
+
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
   // Show landing page if not logged in and not on login/register
   if (!isLoggedIn && !showLanding) {
     return (
       <Landing 
         onGetStarted={handleGetStarted}
         onLogin={() => setShowLanding(true)}
+<<<<<<< HEAD
+=======
+        onNavigate={handleNavigate}
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
       />
     );
   }

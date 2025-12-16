@@ -502,6 +502,7 @@
   font-size: 14px;
 }
 
+<<<<<<< HEAD
 .footer-links a {
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
@@ -509,6 +510,23 @@
 }
 
 .footer-links a:hover {
+=======
+.footer-links a,
+.footer-links button {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0;
+}
+
+.footer-links a:hover,
+.footer-links button:hover {
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
   color: var(--soft-green);
 }
 

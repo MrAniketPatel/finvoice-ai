@@ -24,6 +24,7 @@ app.use((req, res, next) => {
 });
 
 // ✅ Allow requests from your frontend
+<<<<<<< HEAD
 const allowedOrigins = [
   "http://localhost:3000", // Local development
   "http://localhost:3000/finvoice-ai", // Local development with path
@@ -47,6 +48,11 @@ app.use(
       }
       return callback(null, true);
     },
+=======
+app.use(
+  cors({
+    origin: true, // Allow all origins for development
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
     credentials: true,
   })
 );

@@ -20,7 +20,11 @@
     "express-rate-limit": "^8.2.1",
     "express-validator": "^7.3.1",
     "jsonwebtoken": "^9.0.2",
+<<<<<<< HEAD
     "mongodb": "^6.20.0",
+=======
+    "mongodb": "^6.21.0",
+>>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
     "mongoose": "^8.19.2"
   }
 }
