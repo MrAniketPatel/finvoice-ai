@@ -65,7 +65,7 @@ const useAlerts = () => {
 
     // Show browser notification for overdue
     if (overdue > 0 && 'Notification' in window && Notification.permission === 'granted') {
-      new Notification('FinVoice.AI - Payment Overdue!', {
+      new Notification('FinVoiceAI - Payment Overdue!', {
         body: `You have ${overdue} overdue payment${overdue > 1 ? 's' : ''}`,
         icon: '/favicon.ico',
         badge: '/favicon.ico',

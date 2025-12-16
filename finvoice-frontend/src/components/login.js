@@ -18,6 +18,12 @@ function Login({ onLoginSuccess, switchToRegister, onBack }) {
         body: JSON.stringify({ email, password }),
       });
 
+      // Check if response is JSON
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Backend server error. Please check if the server is running.");
+      }
+
       const data = await res.json();
 
       if (!res.ok) {
@@ -27,7 +33,11 @@ function Login({ onLoginSuccess, switchToRegister, onBack }) {
       localStorage.setItem("token", data.token);
       onLoginSuccess();
     } catch (err) {
-      setError(err.message);
+      if (err.name === "SyntaxError") {
+        setError("Backend connection error. Please ensure the server is running on port 5000.");
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }

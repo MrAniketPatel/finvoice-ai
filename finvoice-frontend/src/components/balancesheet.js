@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { suggestCategory } from "../utils/aiInsights";
 
 function BalanceSheet() {
   const [data, setData] = useState(null);
@@ -16,6 +17,7 @@ function BalanceSheet() {
   useEffect(() => {
     fetchBalance();
     fetchTransactions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [period]);
 
   const fetchBalance = async () => {
@@ -124,6 +126,14 @@ function BalanceSheet() {
               value={newTransaction.amount}
               onChange={(e) => setNewTransaction({ ...newTransaction, amount: e.target.value })}
               required
+              min="0"
+              step="0.01"
+              onKeyPress={(e) => {
+                // Only allow numbers and decimal point
+                if (!/[0-9.]/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
             />
             <input
               type="text"
@@ -136,7 +146,17 @@ function BalanceSheet() {
               type="text"
               placeholder="Description (optional)"
               value={newTransaction.description}
-              onChange={(e) => setNewTransaction({ ...newTransaction, description: e.target.value })}
+              onChange={(e) => {
+                const desc = e.target.value;
+                setNewTransaction({ ...newTransaction, description: desc });
+                // Auto-suggest category based on description
+                if (desc.length > 3 && !newTransaction.category) {
+                  const suggested = suggestCategory(desc);
+                  if (suggested !== "Other") {
+                    setNewTransaction({ ...newTransaction, description: desc, category: suggested });
+                  }
+                }
+              }}
             />
           </div>
           <button type="submit" className="btn-secondary">Add Transaction</button>

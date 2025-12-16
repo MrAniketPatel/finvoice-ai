@@ -44,7 +44,7 @@ function Register({ onRegisterSuccess, switchToLogin }) {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h2>Join FinVoice.AI</h2>
+        <h2>Join FinVoiceAI</h2>
         <p style={{ textAlign: "center", color: "#666", marginBottom: "30px" }}>
           Start your journey to financial clarity
         </p>

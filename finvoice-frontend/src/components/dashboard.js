@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import VoiceAssistant from "./VoiceAssistant";
+import AIInsights from "./AIInsights";
 
 function Dashboard() {
   const [data, setData] = useState(null);
@@ -54,12 +55,17 @@ function Dashboard() {
 
   return (
     <div className="content-container">
-      <h2>Welcome back, {data?.user?.name}! 👋</h2>
+      <h2>Welcome back, {data?.user?.name}</h2>
       <p style={{ color: "#666", marginBottom: "20px", fontSize: "16px" }}>
         Here's your financial overview at a glance
       </p>
       
       <VoiceAssistant onRefresh={fetchDashboardData} />
+      
+      {/* AI Insights */}
+      {console.log("Dashboard data:", data)}
+      {console.log("Transactions for AI:", data?.transactions || data?.recentTransactions)}
+      <AIInsights transactions={data?.transactions || data?.recentTransactions || []} />
       
       <div className="stats-grid">
         <div className="stat-card">

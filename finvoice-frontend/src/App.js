@@ -8,6 +8,7 @@ import BalanceSheet from "./components/balancesheet.js";
 import PayableAlerts from "./components/payable-alerts.js";
 import Profile from "./components/profile.js";
 import FloatingVoiceButton from "./components/FloatingVoiceButton.js";
+import SubscriptionPage from "./components/SubscriptionPage.js";
 // Navigation removed - using inline navbar
 import useAlerts from "./hooks/useAlerts.js";
 
@@ -77,6 +78,8 @@ function App() {
         return <PayableAlerts />;
       case "profile":
         return <Profile />;
+      case "subscription":
+        return <SubscriptionPage />;
       default:
         return <Dashboard />;
     }
@@ -91,7 +94,10 @@ function App() {
     <div className="app-container">
       {/* Navigation Bar */}
       <nav className="navbar">
-        <h1>💼 FinVoice.AI</h1>
+        <div className="navbar-logo">
+          <div className="logo-icon">F</div>
+          <h1>FinVoiceAI</h1>
+        </div>
         
         {/* Desktop Navigation */}
         <div className="nav-buttons">
@@ -139,6 +145,12 @@ function App() {
             onClick={() => setView("profile")}
           >
             Profile
+          </button>
+          <button 
+            className={`nav-btn ${view === "subscription" ? "active" : ""}`}
+            onClick={() => setView("subscription")}
+          >
+            Upgrade
           </button>
           <button className="nav-btn logout-btn" onClick={handleLogout}>
             Logout
@@ -197,6 +209,12 @@ function App() {
               onClick={() => { setView("profile"); setIsMobileMenuOpen(false); }}
             >
               👤 Profile
+            </button>
+            <button 
+              className={`mobile-menu-item ${view === "subscription" ? "active" : ""}`}
+              onClick={() => { setView("subscription"); setIsMobileMenuOpen(false); }}
+            >
+              ⭐ Upgrade
             </button>
             <button 
               className="mobile-menu-item logout"

@@ -34,7 +34,7 @@ function Landing({ onGetStarted, onLogin }) {
             you see <span className="gradient-text">your money</span>
           </h1>
           <p className="hero-subtitle reveal">
-            FinVoice.AI turns financial chaos into clarity. Track income,
+            FinVoiceAI turns financial chaos into clarity. Track income,
             expenses, and invoices — all powered by intelligence.
           </p>
           <div className="hero-buttons reveal">
@@ -96,7 +96,7 @@ function Landing({ onGetStarted, onLogin }) {
       {/* Story Section - The Transformation */}
       <section className="story-section transformation-section">
         <div className="story-content reveal">
-          <h2 className="story-title">Then came FinVoice.AI — a voice that understands your story.</h2>
+          <h2 className="story-title">Then came FinVoiceAI — a voice that understands your story.</h2>
           <p className="story-text">
             Record your income. Track your expenses. Set reminders.
             <br />
@@ -115,7 +115,7 @@ function Landing({ onGetStarted, onLogin }) {
             Finance made human. Effortless. Intelligent.
             <br />
             <br />
-            This is clarity. This is control. This is FinVoice.AI.
+            This is clarity. This is control. This is FinVoiceAI.
           </p>
         </div>
       </section>
@@ -144,7 +144,7 @@ function Landing({ onGetStarted, onLogin }) {
             <h3>Voice Commands</h3>
             <p>
               Add or check entries hands-free. Just speak naturally, and
-              FinVoice.AI understands what you need.
+              FinVoiceAI understands what you need.
             </p>
           </div>
 
@@ -171,7 +171,7 @@ function Landing({ onGetStarted, onLogin }) {
             <h3>Personal Profiles</h3>
             <p>
               Whether you're a student, freelancer, or business owner —
-              FinVoice.AI fits your world, not the other way around.
+              FinVoiceAI fits your world, not the other way around.
             </p>
           </div>
 
@@ -210,7 +210,7 @@ function Landing({ onGetStarted, onLogin }) {
             <h3>Add Your Transactions</h3>
             <p>
               Start tracking effortlessly. Type, speak, or import — however you
-              work, FinVoice.AI adapts.
+              work, FinVoiceAI adapts.
             </p>
           </div>
 
@@ -233,14 +233,14 @@ function Landing({ onGetStarted, onLogin }) {
           <p className="testimonial-quote">
             "Because finance should speak your language."
           </p>
-          <p className="testimonial-author">— The FinVoice.AI Promise</p>
+          <p className="testimonial-author">— The FinVoiceAI Promise</p>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="cta-section">
         <div className="cta-content reveal">
-          <h2>Finance, simplified. Your story, powered by FinVoice.AI.</h2>
+          <h2>Finance, simplified. Your story, powered by FinVoiceAI.</h2>
           <p>
             Join thousands who've transformed their relationship with money.
             Start your journey today.
@@ -256,7 +256,7 @@ function Landing({ onGetStarted, onLogin }) {
         <div className="footer-content">
           <p className="footer-tagline">Your voice. Your data. Your control.</p>
           <p className="footer-copyright">
-            © 2025 FinVoice.AI — Intelligent Finance Management
+            © 2025 FinVoiceAI — Intelligent Finance Management
           </p>
           <div className="footer-links">
             <a href="#privacy">Privacy Policy</a>
