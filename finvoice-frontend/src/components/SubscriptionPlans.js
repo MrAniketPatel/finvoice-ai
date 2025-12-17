@@ -1,22 +1,16 @@
 import React, { useState } from 'react';
 
 function SubscriptionPlans({ currentPlan = 'free', onUpgrade }) {
-<<<<<<< HEAD
-  const [selectedPlan, setSelectedPlan] = useState(currentPlan);
-  const [billingCycle, setBillingCycle] = useState('monthly');
-=======
   const [showModal, setShowModal] = useState(false);
   const [modalPlan, setModalPlan] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   React.useEffect(() => {
-    // Simulate loading to prevent layout shift
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 100);
     return () => clearTimeout(timer);
   }, []);
->>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
 
   const plans = {
     free: {
@@ -108,7 +102,7 @@ function SubscriptionPlans({ currentPlan = 'free', onUpgrade }) {
 
   const getSavings = (planKey) => {
     if (planKey === 'yearly') {
-      const monthlyEquivalent = 149 * 13; // 13 months of monthly plan
+      const monthlyEquivalent = 149 * 13;
       const savings = monthlyEquivalent - 1499;
       return { amount: savings, description: '1 month free' };
     }
@@ -120,8 +114,6 @@ function SubscriptionPlans({ currentPlan = 'free', onUpgrade }) {
     return null;
   };
 
-<<<<<<< HEAD
-=======
   const openModal = (key, plan) => {
     setModalPlan({ key, ...plan });
     setShowModal(true);
@@ -132,19 +124,11 @@ function SubscriptionPlans({ currentPlan = 'free', onUpgrade }) {
     setModalPlan(null);
   };
 
->>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
   return (
     <div className="subscription-container">
       <div className="subscription-header">
         <h2>Choose Your Plan</h2>
         <p>Unlock the full power of AI-driven financial management</p>
-<<<<<<< HEAD
-        
-
-      </div>
-
-      <div className="plans-grid">
-=======
       </div>
 
       {isLoading ? (
@@ -163,81 +147,51 @@ function SubscriptionPlans({ currentPlan = 'free', onUpgrade }) {
         </div>
       ) : (
         <div className="plans-grid-compact plans-fade-in">
->>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
-        {Object.entries(plans).map(([key, plan]) => {
-          const savings = getSavings(key);
-          
-          return (
-            <div 
-              key={key}
-<<<<<<< HEAD
-              className={`plan-card plan-${plan.color} ${plan.popular ? 'popular' : ''} ${selectedPlan === key ? 'selected' : ''}`}
-              onClick={() => setSelectedPlan(key)}
-            >
-              {plan.popular && <div className="popular-badge">Most Popular</div>}
-              {plan.bonus && <div className="bonus-badge">{plan.bonus}</div>}
-              
-              <div className="plan-header">
+          {Object.entries(plans).map(([key, plan]) => {
+            const savings = getSavings(key);
+            
+            return (
+              <div 
+                key={key}
+                className={`plan-card-compact plan-${plan.color} ${plan.popular ? 'popular' : ''} ${currentPlan === key ? 'selected' : ''}`}
+                onClick={() => openModal(key, plan)}
+              >
+                {plan.popular && <div className="popular-badge-compact">Most Popular</div>}
+                {plan.bonus && <div className="bonus-badge-compact">🎁 {plan.bonus}</div>}
+                
+                <div className="plan-icon">{key === 'free' ? '🆓' : key === 'monthly' ? '📅' : key === 'quarterly' ? '📊' : '⭐'}</div>
                 <h3>{plan.name}</h3>
-                <div className="plan-price">
+                <div className="plan-price-compact">
                   <span className="price">{getPrice(plan)}</span>
                   <span className="period">{getPeriod(key, plan)}</span>
                 </div>
                 
                 {savings && (
-                  <div className="savings-info">
-                    {savings.description}
-                  </div>
+                  <div className="savings-compact">💰 {savings.description}</div>
                 )}
-              </div>
-
-              <div className="plan-features">
-                <div className="entries-info">
-                  <strong>{plan.entries}</strong> entries{plan.period ? ` per ${plan.period}` : ''}
+                
+                <div className="entries-compact">
+                  <strong>{plan.entries}</strong> entries{plan.period ? `/${plan.period}` : ''}
                 </div>
                 
-                <ul>
-                  {plan.features.map((feature, index) => (
-=======
-              className={`plan-card-compact plan-${plan.color} ${plan.popular ? 'popular' : ''} ${currentPlan === key ? 'selected' : ''}`}
-              onClick={() => openModal(key, plan)}
-            >
-              {plan.popular && <div className="popular-badge-compact">Most Popular</div>}
-              {plan.bonus && <div className="bonus-badge-compact">🎁 {plan.bonus}</div>}
-              
-              <div className="plan-icon">{key === 'free' ? '🆓' : key === 'monthly' ? '📅' : key === 'quarterly' ? '📊' : '⭐'}</div>
-              <h3>{plan.name}</h3>
-              <div className="plan-price-compact">
-                <span className="price">{getPrice(plan)}</span>
-                <span className="period">{getPeriod(key, plan)}</span>
+                <div className="features-preview">
+                  {plan.features.slice(0, 3).map((feature, idx) => (
+                    <div key={idx} className="feature-preview-item">
+                      <span className="check-mini">✓</span>
+                      <span>{feature.length > 25 ? feature.substring(0, 25) + '...' : feature}</span>
+                    </div>
+                  ))}
+                  {plan.features.length > 3 && (
+                    <div className="more-features">+{plan.features.length - 3} more</div>
+                  )}
+                </div>
+                
+                <button className="view-details-btn">
+                  {currentPlan === key ? '✓ Current Plan' : 'View Full Details →'}
+                </button>
               </div>
-              
-              {savings && (
-                <div className="savings-compact">💰 {savings.description}</div>
-              )}
-              
-              <div className="entries-compact">
-                <strong>{plan.entries}</strong> entries{plan.period ? `/${plan.period}` : ''}
-              </div>
-              
-              <div className="features-preview">
-                {plan.features.slice(0, 3).map((feature, idx) => (
-                  <div key={idx} className="feature-preview-item">
-                    <span className="check-mini">✓</span>
-                    <span>{feature.length > 25 ? feature.substring(0, 25) + '...' : feature}</span>
-                  </div>
-                ))}
-                {plan.features.length > 3 && (
-                  <div className="more-features">+{plan.features.length - 3} more</div>
-                )}
-              </div>
-              
-              <button className="view-details-btn">
-                {currentPlan === key ? '✓ Current Plan' : 'View Full Details →'}
-              </button>
-            </div>
-          );
-        })}
+            );
+          })}
         </div>
       )}
 
@@ -267,42 +221,12 @@ function SubscriptionPlans({ currentPlan = 'free', onUpgrade }) {
                 <h4>Features:</h4>
                 <ul>
                   {modalPlan.features.map((feature, index) => (
->>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
                     <li key={index}>
                       <span className="check-icon">✓</span>
                       {feature}
                     </li>
                   ))}
                 </ul>
-<<<<<<< HEAD
-
-                {plan.limitations && (
-                  <div className="limitations">
-                    <h4>Limitations:</h4>
-                    <ul>
-                      {plan.limitations.map((limitation, index) => (
-                        <li key={index}>
-                          <span className="cross-icon">✗</span>
-                          {limitation}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              <button 
-                className={`plan-button ${currentPlan === key ? 'current' : ''}`}
-                onClick={() => onUpgrade && onUpgrade(key)}
-              >
-                {currentPlan === key ? 'Current Plan' : 
-                 key === 'free' ? 'Get Started' : 'Subscribe Now'}
-              </button>
-            </div>
-          );
-        })}
-      </div>
-=======
               </div>
 
               {modalPlan.limitations && (
@@ -335,7 +259,6 @@ function SubscriptionPlans({ currentPlan = 'free', onUpgrade }) {
           </div>
         </>
       )}
->>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
 
       <div className="subscription-footer">
         <div className="cost-breakdown">

@@ -24,35 +24,9 @@ app.use((req, res, next) => {
 });
 
 // ✅ Allow requests from your frontend
-<<<<<<< HEAD
-const allowedOrigins = [
-  "http://localhost:3000", // Local development
-  "http://localhost:3000/finvoice-ai", // Local development with path
-  "https://mraniketpatel.github.io", // Production frontend
-];
-
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-      
-      // Allow localhost on any port for development
-      if (origin && origin.startsWith("http://localhost:")) {
-        return callback(null, true);
-      }
-      
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = "The CORS policy for this site does not allow access from the specified Origin.";
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
-=======
 app.use(
   cors({
     origin: true, // Allow all origins for development
->>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
     credentials: true,
   })
 );

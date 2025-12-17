@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import "../Landing.css";
 
-<<<<<<< HEAD
-function Landing({ onGetStarted, onLogin }) {
-=======
 function Landing({ onGetStarted, onLogin, onNavigate }) {
->>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
   useEffect(() => {
     // Scroll reveal animation
     const observerOptions = {
@@ -263,19 +259,11 @@ function Landing({ onGetStarted, onLogin, onNavigate }) {
             © 2025 FinVoiceAI — Intelligent Finance Management
           </p>
           <div className="footer-links">
-<<<<<<< HEAD
-            <a href="#privacy">Privacy Policy</a>
-            <span>•</span>
-            <a href="#terms">Terms of Service</a>
-            <span>•</span>
-            <a href="#contact">Contact</a>
-=======
             <button onClick={() => onNavigate && onNavigate('privacy')}>Privacy Policy</button>
             <span>•</span>
             <button onClick={() => onNavigate && onNavigate('terms')}>Terms of Service</button>
             <span>•</span>
             <button onClick={() => onNavigate && onNavigate('contact')}>Contact</button>
->>>>>>> 3bf1bda (feat: Initial commit with subscription redesign and legal pages)
           </div>
         </div>
       </footer>
