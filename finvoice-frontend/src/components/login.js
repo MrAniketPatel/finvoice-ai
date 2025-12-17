@@ -5,6 +5,8 @@ function Login({ onLoginSuccess, switchToRegister, onBack }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +32,13 @@ function Login({ onLoginSuccess, switchToRegister, onBack }) {
         throw new Error(data.msg || "Login failed. Please check your credentials.");
       }
 
-      localStorage.setItem("token", data.token);
+      // Store token based on remember me preference
+      if (rememberMe) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("rememberMe", "true");
+      } else {
+        sessionStorage.setItem("token", data.token);
+      }
       onLoginSuccess();
     } catch (err) {
       if (err.name === "SyntaxError") {
@@ -60,14 +68,32 @@ function Login({ onLoginSuccess, switchToRegister, onBack }) {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group password-input-group">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <button
+              type="button"
+              className="password-toggle-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? "👁️" : "👁️‍🗨️"}
+            </button>
+          </div>
+          <div className="form-group remember-me-group">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <span>Remember me</span>
+            </label>
           </div>
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? "Logging in..." : "Login"}

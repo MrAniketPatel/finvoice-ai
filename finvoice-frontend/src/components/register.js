@@ -8,9 +8,25 @@ function Register({ onRegisterSuccess, switchToLogin }) {
   });
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState("");
+  
+  const checkPasswordStrength = (password) => {
+    if (password.length === 0) return "";
+    if (password.length < 6) return "weak";
+    if (password.length < 10 && /[A-Z]/.test(password) && /[0-9]/.test(password)) return "medium";
+    if (password.length >= 10 && /[A-Z]/.test(password) && /[0-9]/.test(password) && /[!@#$%^&*]/.test(password)) return "strong";
+    return "medium";
+  };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    
+    // Check password strength on password change
+    if (name === "password") {
+      setPasswordStrength(checkPasswordStrength(value));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -69,16 +85,35 @@ function Register({ onRegisterSuccess, switchToLogin }) {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group password-input-group">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
-              placeholder="Password"
+              placeholder="Password (min 6 characters)"
               value={formData.password}
               onChange={handleChange}
               required
+              minLength="6"
             />
+            <button
+              type="button"
+              className="password-toggle-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? "👁️" : "👁️‍🗨️"}
+            </button>
           </div>
+          {formData.password && (
+            <div className={`password-strength password-${passwordStrength}`}>
+              <div className="strength-bar">
+                <div className="strength-fill"></div>
+              </div>
+              <span className="strength-text">
+                Password strength: <strong>{passwordStrength}</strong>
+              </span>
+            </div>
+          )}
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? "Creating account..." : "Register"}
           </button>

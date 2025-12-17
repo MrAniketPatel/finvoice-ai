@@ -9,6 +9,16 @@ const userSchema = new mongoose.Schema({
   companyName: { type: String },
   startedYear: { type: Number },
   
+  // Profile fields
+  phone: { type: String },
+  address: { type: String },
+  city: { type: String },
+  country: { type: String },
+  timezone: { type: String, default: 'Asia/Kolkata' },
+  currency: { type: String, default: 'INR' },
+  language: { type: String, default: 'en' },
+  avatar: { type: String },
+  
   // Subscription fields
   subscriptionTier: { 
     type: String, 
