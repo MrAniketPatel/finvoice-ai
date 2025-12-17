@@ -24,6 +24,13 @@ function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { pendingCount, overdueCount, dueSoonCount, requestNotificationPermission } = useAlerts();
 
+  // Debug logging
+  useEffect(() => {
+    console.log("🚀 FinVoice App Loaded");
+    console.log("API URL:", process.env.REACT_APP_API_URL);
+    console.log("Is Logged In:", isLoggedIn);
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);

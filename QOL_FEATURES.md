@@ -19,7 +19,7 @@
 
 ### 4. Improved Focus States
 - **What**: Better visual feedback when inputs are focused
-- **Where**: All forms
+- **Where**: 
 - **Benefit**: Better accessibility and UX
 
 ### 5. Form Validation Feedback
@@ -42,7 +42,7 @@
 - Esc: Close modals
 ```
 
-**Implementation:**
+**Implementation:**All forms
 ```javascript
 // Add to App.js
 useEffect(() => {
