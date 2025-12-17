@@ -1,6 +1,7 @@
 import express from "express";
 import Transaction from "../models/transaction.js";
 import { authMiddleware } from "../middlewares/auth.js";
+import { canAddTransaction, incrementTransactionCount } from "../middlewares/subscriptionCheck.js";
 
 const router = express.Router();
 
@@ -14,8 +15,8 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
-// Add new transaction
-router.post("/", authMiddleware, async (req, res) => {
+// Add new transaction (with subscription limit check)
+router.post("/", authMiddleware, canAddTransaction, async (req, res) => {
   try {
     const { type, amount, category, description, date } = req.body;
     
@@ -29,6 +30,10 @@ router.post("/", authMiddleware, async (req, res) => {
     });
 
     await transaction.save();
+    
+    // Increment transaction count
+    await incrementTransactionCount(req.userId);
+    
     res.status(201).json(transaction);
   } catch (err) {
     res.status(500).json({ msg: "Server error", error: err.message });
