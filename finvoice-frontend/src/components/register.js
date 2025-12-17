@@ -115,6 +115,25 @@ function Register({ onRegisterSuccess, switchToLogin }) {
               </span>
             </div>
           )}
+          <div className="password-requirements">
+            <p style={{ fontSize: "12px", color: "#666", margin: "10px 0 5px" }}>
+              Password must contain:
+            </p>
+            <ul style={{ fontSize: "11px", color: "#666", margin: "0", paddingLeft: "20px" }}>
+              <li style={{ color: formData.password.length >= 6 ? "#10b981" : "#666" }}>
+                ✓ At least 6 characters
+              </li>
+              <li style={{ color: /[A-Z]/.test(formData.password) ? "#10b981" : "#666" }}>
+                ✓ One uppercase letter
+              </li>
+              <li style={{ color: /[a-z]/.test(formData.password) ? "#10b981" : "#666" }}>
+                ✓ One lowercase letter
+              </li>
+              <li style={{ color: /\d/.test(formData.password) ? "#10b981" : "#666" }}>
+                ✓ One number
+              </li>
+            </ul>
+          </div>
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? "Creating account..." : "Register"}
           </button>
