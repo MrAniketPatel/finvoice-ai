@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PaymentConfirmModal from "./PaymentConfirmModal";
+import { API_ENDPOINTS } from "../config";
 
 function PayableAlerts() {
   const [alerts, setAlerts] = useState([]);
@@ -19,7 +20,7 @@ function PayableAlerts() {
   const fetchAlerts = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/alerts", {
+      const res = await fetch(API_ENDPOINTS.ALERTS, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -37,7 +38,7 @@ function PayableAlerts() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/alerts", {
+      const res = await fetch(API_ENDPOINTS.ALERTS, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +75,7 @@ function PayableAlerts() {
       const token = localStorage.getItem("token");
 
       // Mark alert as paid
-      const res = await fetch(`http://localhost:5000/api/alerts/${selectedAlert._id}`, {
+      const res = await fetch(`${API_ENDPOINTS.ALERTS}/${selectedAlert._id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -86,7 +87,7 @@ function PayableAlerts() {
       if (res.ok) {
         // If user confirmed, add as expense transaction
         if (addAsExpense) {
-          await fetch("http://localhost:5000/api/transactions", {
+          await fetch(API_ENDPOINTS.TRANSACTIONS, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -114,7 +115,7 @@ function PayableAlerts() {
   const handleDeleteAlert = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/alerts/${id}`, {
+      const res = await fetch(`${API_ENDPOINTS.ALERTS}/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

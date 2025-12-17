@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { suggestCategory } from "../utils/aiInsights";
+import { API_ENDPOINTS } from "../config";
 
 function BalanceSheet() {
   const [data, setData] = useState(null);
@@ -23,7 +24,7 @@ function BalanceSheet() {
   const fetchBalance = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/balancesheet?period=${period}`, {
+      const res = await fetch(`${API_ENDPOINTS.BALANCE_SHEET}?period=${period}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -43,7 +44,7 @@ function BalanceSheet() {
   const fetchTransactions = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/transactions", {
+      const res = await fetch(API_ENDPOINTS.TRANSACTIONS, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -59,7 +60,7 @@ function BalanceSheet() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/transactions", {
+      const res = await fetch(API_ENDPOINTS.TRANSACTIONS, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -86,7 +87,7 @@ function BalanceSheet() {
   const handleDeleteTransaction = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/transactions/${id}`, {
+      const res = await fetch(`${API_ENDPOINTS.TRANSACTIONS}/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

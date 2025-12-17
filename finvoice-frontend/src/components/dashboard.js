@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import VoiceAssistant from "./VoiceAssistant";
 import AIInsights from "./AIInsights";
+import { API_ENDPOINTS } from "../config";
 
 function Dashboard() {
   const [data, setData] = useState(null);
@@ -21,7 +22,7 @@ function Dashboard() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/dashboard", {
+      const res = await fetch(API_ENDPOINTS.DASHBOARD, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useVoiceInput from "../hooks/useVoiceInput";
 import { parseTransactionVoice, parseAlertVoice } from "../utils/voiceParser";
+import { API_ENDPOINTS } from "../config";
 
 function FloatingVoiceButton({ onRefresh }) {
   const { isListening, transcript, isSupported, startListening } = useVoiceInput();
@@ -36,7 +37,7 @@ function FloatingVoiceButton({ onRefresh }) {
           return;
         }
 
-        const res = await fetch("http://localhost:5000/api/transactions", {
+        const res = await fetch(API_ENDPOINTS.TRANSACTIONS, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -64,7 +65,7 @@ function FloatingVoiceButton({ onRefresh }) {
           return;
         }
 
-        const res = await fetch("http://localhost:5000/api/alerts", {
+        const res = await fetch(API_ENDPOINTS.ALERTS, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useToast, ToastContainer } from './Toast';
+import { API_ENDPOINTS } from "../config";
 
 function Profile() {
   const [userData, setUserData] = useState({
@@ -40,7 +41,7 @@ function Profile() {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/profile", {
+      const res = await fetch(API_ENDPOINTS.PROFILE, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -80,7 +81,7 @@ function Profile() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/profile", {
+      const res = await fetch(API_ENDPOINTS.PROFILE, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -140,7 +141,7 @@ function Profile() {
     setSaving(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/profile/change-password", {
+      const res = await fetch(`${API_ENDPOINTS.PROFILE}/change-password`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

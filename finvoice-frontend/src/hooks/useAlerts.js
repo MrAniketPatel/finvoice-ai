@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { API_ENDPOINTS } from '../config';
 
 const useAlerts = () => {
   const [alerts, setAlerts] = useState([]);
@@ -19,7 +20,7 @@ const useAlerts = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const res = await fetch('http://localhost:5000/api/alerts', {
+      const res = await fetch(API_ENDPOINTS.ALERTS, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
