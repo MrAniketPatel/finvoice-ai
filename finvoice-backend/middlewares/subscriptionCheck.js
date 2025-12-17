@@ -38,7 +38,7 @@ export const resetMonthlyCounter = async (user) => {
 // Check if user can add transaction
 export const canAddTransaction = async (req, res, next) => {
   try {
-    let user = await User.findById(req.user.id);
+    let user = await User.findById(req.userId);
     
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -98,7 +98,7 @@ export const incrementTransactionCount = async (userId) => {
 export const requireFeature = (featureName) => {
   return async (req, res, next) => {
     try {
-      const user = await User.findById(req.user.id);
+      const user = await User.findById(req.userId);
       
       if (!user) {
         return res.status(404).json({ error: "User not found" });
@@ -127,7 +127,7 @@ export const requireFeature = (featureName) => {
 // Get usage stats for user
 export const getUsageStats = async (req, res) => {
   try {
-    let user = await User.findById(req.user.id);
+    let user = await User.findById(req.userId);
     
     if (!user) {
       return res.status(404).json({ error: "User not found" });
