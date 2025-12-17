@@ -15,6 +15,9 @@ dotenv.config();
 
 const app = express();
 
+// Trust proxy - required for rate limiting behind Render/Vercel
+app.set('trust proxy', 1);
+
 // Security headers
 app.use((req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
