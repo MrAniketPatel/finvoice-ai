@@ -11,4 +11,10 @@ export const API_ENDPOINTS = {
   BALANCE_SHEET: `${API_URL}/api/balancesheet`,
   ALERTS: `${API_URL}/api/alerts`,
   PROFILE: `${API_URL}/api/profile`,
+  SUBSCRIPTION: `${API_URL}/api/subscription`,
+  AI: {
+    TRANSCRIBE: `${API_URL}/api/ai/transcribe`,
+    INSIGHTS: `${API_URL}/api/ai/insights`,
+    CATEGORIZE: `${API_URL}/api/ai/categorize`,
+  },
 };

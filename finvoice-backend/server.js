@@ -9,6 +9,8 @@ import transactionRoutes from "./routes/transactions.js";
 import alertRoutes from "./routes/alerts.js";
 import profileRoutes from "./routes/profile.js";
 import subscriptionRoutes from "./routes/subscription.js";
+import aiRoutes from "./routes/ai.js";
+import adminRoutes from "./routes/admin.js";
 import { apiLimiter } from "./middlewares/rateLimiter.js";
 
 dotenv.config();
@@ -52,6 +54,8 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/alerts", alertRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/subscription", subscriptionRoutes);
+app.use("/api/ai", aiRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Root route (optional)
 app.get("/", (req, res) => {

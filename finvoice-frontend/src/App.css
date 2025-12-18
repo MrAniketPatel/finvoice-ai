@@ -3692,3 +3692,214 @@ a:focus-visible {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+
+/* Premium Modal Styles */
+.premium-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 10001;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.premium-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.premium-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.premium-header h2 {
+  color: var(--navy);
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.premium-subtitle {
+  color: var(--gray-600);
+  font-size: 16px;
+}
+
+.premium-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.premium-plan-card {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--soft-green) 100%);
+  color: white;
+  padding: 32px;
+  border-radius: 16px;
+  position: relative;
+}
+
+.plan-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.premium-plan-card h3 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.plan-price {
+  margin-bottom: 24px;
+}
+
+.plan-price .price {
+  font-size: 48px;
+  font-weight: 700;
+}
+
+.plan-price .period {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+
+.plan-features li {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.plan-features li:last-child {
+  border-bottom: none;
+}
+
+.check-icon {
+  background: rgba(255, 255, 255, 0.3);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn-upgrade {
+  width: 100%;
+  padding: 16px;
+  background: white;
+  color: var(--teal);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-upgrade:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.premium-benefits {
+  padding: 24px;
+  background: var(--off-white);
+  border-radius: 12px;
+}
+
+.premium-benefits h4 {
+  color: var(--navy);
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.benefit-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.benefit-item:last-child {
+  border-bottom: none;
+}
+
+.benefit-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.benefit-item strong {
+  color: var(--navy);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.benefit-item p {
+  color: var(--gray-600);
+  font-size: 14px;
+  margin: 0;
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--gray-200);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  background: var(--gray-300);
+  transform: rotate(90deg);
+}
+
+/* Premium Badge for Features */
+.premium-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.premium-badge-icon {
+  font-size: 12px;
+}
