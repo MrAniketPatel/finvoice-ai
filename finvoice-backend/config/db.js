@@ -16,8 +16,30 @@ const connectDB = async () => {
     }
     
     console.log("🔌 Attempting to connect to MongoDB...");
-    await mongoose.connect(mongoURI);
+    
+    // Connection options for better stability
+    const options = {
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+      family: 4 // Use IPv4, skip trying IPv6
+    };
+    
+    await mongoose.connect(mongoURI, options);
     console.log("✅ MongoDB Connected Successfully");
+    
+    // Handle connection events
+    mongoose.connection.on('disconnected', () => {
+      console.log('⚠️ MongoDB disconnected. Attempting to reconnect...');
+    });
+    
+    mongoose.connection.on('reconnected', () => {
+      console.log('✅ MongoDB reconnected successfully');
+    });
+    
+    mongoose.connection.on('error', (err) => {
+      console.error('❌ MongoDB connection error:', err);
+    });
+    
   } catch (err) {
     console.error("❌ MongoDB Connection Failed:", err.message);
     process.exit(1);

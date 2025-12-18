@@ -62,6 +62,16 @@ app.get("/", (req, res) => {
   res.send("✅ FinVoice.AI Backend is running...");
 });
 
+// Keep MongoDB connection alive
+setInterval(async () => {
+  try {
+    await mongoose.connection.db.admin().ping();
+    console.log('💓 MongoDB ping successful');
+  } catch (error) {
+    console.error('❌ MongoDB ping failed:', error.message);
+  }
+}, 5 * 60 * 1000); // Ping every 5 minutes
+
 // Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

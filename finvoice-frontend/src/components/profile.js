@@ -19,6 +19,12 @@ function Profile() {
     language: "en",
     avatar: "",
   });
+  const [subscriptionInfo, setSubscriptionInfo] = useState({
+    tier: "free",
+    expiry: null,
+    transactionCount: 0,
+    maxTransactions: 50
+  });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
@@ -37,6 +43,36 @@ function Profile() {
   useEffect(() => {
     fetchProfile();
   }, []);
+
+  const getMaxTransactions = (tier) => {
+    const limits = {
+      free: 50,
+      monthly: 150,
+      quarterly: 550,
+      yearly: Infinity
+    };
+    return limits[tier] || 50;
+  };
+
+  const getTierBadgeColor = (tier) => {
+    const colors = {
+      free: '#6B7280',
+      monthly: '#3B82F6',
+      quarterly: '#8B5CF6',
+      yearly: '#F59E0B'
+    };
+    return colors[tier] || '#6B7280';
+  };
+
+  const getTierDisplayName = (tier) => {
+    const names = {
+      free: 'Free Plan',
+      monthly: 'Monthly Plan',
+      quarterly: 'Quarterly Plan',
+      yearly: 'Yearly Plan'
+    };
+    return names[tier] || 'Free Plan';
+  };
 
   const fetchProfile = async () => {
     try {
@@ -64,6 +100,15 @@ function Profile() {
           language: data.language || "en",
           avatar: data.avatar || "",
         });
+        
+        // Set subscription info
+        setSubscriptionInfo({
+          tier: data.subscriptionTier || "free",
+          expiry: data.subscriptionExpiry,
+          transactionCount: data.monthlyTransactionCount || 0,
+          maxTransactions: getMaxTransactions(data.subscriptionTier || "free")
+        });
+        
         if (data.avatar) {
           setAvatarPreview(data.avatar);
         }
@@ -213,6 +258,79 @@ function Profile() {
           <span>⚠️ You have unsaved changes</span>
         </div>
       )}
+
+      {/* Subscription Info Banner */}
+      <div className="subscription-info-banner" style={{
+        background: `linear-gradient(135deg, ${getTierBadgeColor(subscriptionInfo.tier)}15, ${getTierBadgeColor(subscriptionInfo.tier)}05)`,
+        border: `2px solid ${getTierBadgeColor(subscriptionInfo.tier)}40`,
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '24px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '16px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{
+            background: getTierBadgeColor(subscriptionInfo.tier),
+            color: 'white',
+            padding: '8px 16px',
+            borderRadius: '20px',
+            fontWeight: '700',
+            fontSize: '14px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px'
+          }}>
+            {subscriptionInfo.tier === 'yearly' && '⭐ '}
+            {getTierDisplayName(subscriptionInfo.tier)}
+          </div>
+          <div>
+            <div style={{ fontSize: '14px', color: '#6B7280', marginBottom: '4px' }}>
+              Transactions Used
+            </div>
+            <div style={{ fontSize: '18px', fontWeight: '700', color: '#1B263B' }}>
+              {subscriptionInfo.transactionCount} / {subscriptionInfo.maxTransactions === Infinity ? '∞' : subscriptionInfo.maxTransactions}
+            </div>
+          </div>
+          {subscriptionInfo.expiry && (
+            <div>
+              <div style={{ fontSize: '14px', color: '#6B7280', marginBottom: '4px' }}>
+                Expires On
+              </div>
+              <div style={{ fontSize: '16px', fontWeight: '600', color: '#1B263B' }}>
+                {new Date(subscriptionInfo.expiry).toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'short', 
+                  day: 'numeric' 
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+        {subscriptionInfo.tier === 'free' && (
+          <button 
+            type="button"
+            onClick={() => window.location.hash = '#subscription'}
+            style={{
+              background: 'linear-gradient(135deg, #71C7B8, #A8DADC)',
+              color: 'white',
+              border: 'none',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              fontSize: '14px',
+              transition: 'transform 0.2s'
+            }}
+            onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
+            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+          >
+            ⭐ Upgrade Plan
+          </button>
+        )}
+      </div>
 
       <div className="profile-tabs">
         <button
