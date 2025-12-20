@@ -3907,23 +3907,13 @@ a:focus-visible {
 
 /* Voice Recording Animations */
 .floating-voice-btn.recording {
-  animation: pulse-recording 1.5s ease-in-out infinite;
   background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  animation: pulse 1.5s infinite;
 }
 
 .floating-voice-btn.processing {
   animation: spin 1s linear infinite;
-}
-
-@keyframes pulse-recording {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
-  }
-  50% {
-    transform: scale(1.1);
-    box-shadow: 0 12px 32px rgba(239, 68, 68, 0.6);
-  }
+  opacity: 0.8;
 }
 
 @keyframes spin {
