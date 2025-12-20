@@ -3924,3 +3924,122 @@ a:focus-visible {
     transform: rotate(360deg);
   }
 }
+
+
+/* Voice Assistant Card Styling */
+.voice-assistant-card {
+  background: linear-gradient(135deg, rgba(113, 199, 184, 0.08) 0%, rgba(168, 218, 220, 0.05) 100%);
+  border: 2px solid var(--teal);
+  border-radius: 16px;
+  padding: 32px;
+  margin: 24px auto;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(113, 199, 184, 0.15);
+  transition: all 0.3s ease;
+}
+
+.voice-assistant-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(113, 199, 184, 0.25);
+}
+
+.voice-card-header {
+  margin-bottom: 24px;
+}
+
+.voice-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.voice-title-row h3 {
+  color: var(--navy);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.voice-description {
+  color: var(--gray-600);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.voice-card-actions {
+  margin-top: 24px;
+}
+
+.voice-action-btn {
+  background: linear-gradient(135deg, #71C7B8, #A8DADC);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  fontSize: 16px;
+  min-width: 200px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(113, 199, 184, 0.3);
+}
+
+.voice-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(113, 199, 184, 0.4);
+  background: linear-gradient(135deg, #5fb8a8, #96cfd1);
+}
+
+.voice-action-btn:active {
+  transform: translateY(0);
+}
+
+/* Premium badge in voice card */
+.voice-assistant-card .premium-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.premium-badge-icon {
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .voice-assistant-card {
+    padding: 24px;
+    margin: 16px;
+  }
+  
+  .voice-title-row h3 {
+    font-size: 20px;
+  }
+  
+  .voice-description {
+    font-size: 14px;
+  }
+  
+  .voice-action-btn {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+}

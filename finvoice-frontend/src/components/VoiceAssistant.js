@@ -35,39 +35,31 @@ function VoiceAssistant({ onRefresh }) {
 
   return (
     <div className="voice-assistant-card">
-      <div className="voice-header">
-        <h3>🎤 AI Voice Assistant</h3>
-        {(userTier === 'free' || userTier === 'monthly') && (
-          <span className="premium-badge">
-            <span className="premium-badge-icon">⭐</span>
-            PREMIUM
-          </span>
-        )}
+      <div className="voice-card-header">
+        <div className="voice-title-row">
+          <h3>🎤 AI Voice Assistant</h3>
+          {(userTier === 'free' || userTier === 'monthly') && (
+            <span className="premium-badge">
+              <span className="premium-badge-icon">⭐</span>
+              PREMIUM
+            </span>
+          )}
+        </div>
+        <p className="voice-description">
+          {(userTier === 'free' || userTier === 'monthly')
+            ? "Upgrade to Quarterly or Yearly plan to add transactions using voice commands powered by OpenAI Whisper."
+            : "Add transactions and alerts using voice commands powered by OpenAI Whisper."}
+        </p>
       </div>
-      <p className="voice-description">
-        {(userTier === 'free' || userTier === 'monthly')
-          ? "Upgrade to Quarterly or Yearly plan to add transactions using voice commands powered by OpenAI Whisper."
-          : "Add transactions and alerts using voice commands powered by OpenAI Whisper."}
-      </p>
-      <button 
-        className="voice-btn"
-        onClick={handleVoiceClick}
-        style={{
-          background: (userTier === 'free' || userTier === 'monthly')
-            ? 'linear-gradient(135deg, #FFD700, #FFA500)'
-            : 'linear-gradient(135deg, #71C7B8, #A8DADC)',
-          color: 'white',
-          border: 'none',
-          padding: '12px 24px',
-          borderRadius: '8px',
-          fontWeight: '600',
-          cursor: 'pointer',
-          fontSize: '14px',
-          width: '100%'
-        }}
-      >
-        {(userTier === 'free' || userTier === 'monthly') ? '⭐ Upgrade to Use Voice' : '🎤 Start Voice Command'}
-      </button>
+      
+      <div className="voice-card-actions">
+        <button 
+          className="voice-action-btn"
+          onClick={handleVoiceClick}
+        >
+          {(userTier === 'free' || userTier === 'monthly') ? '⭐ Upgrade to Use Voice' : '🎤 Start Voice Command'}
+        </button>
+      </div>
 
       <PremiumModal
         isOpen={showPremiumModal}
