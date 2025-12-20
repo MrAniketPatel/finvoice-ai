@@ -32,36 +32,38 @@ router.post("/transcribe", authMiddleware, requireFeature("ai_voice"), async (re
 
     // Convert base64 to buffer
     const audioBuffer = Buffer.from(audioBase64, 'base64');
+    
+    // Write to temporary file
+    const fs = await import('fs');
+    const path = await import('path');
+    const os = await import('os');
+    
+    const tempDir = os.tmpdir();
+    const tempFilePath = path.join(tempDir, `audio-${Date.now()}.webm`);
+    
+    fs.writeFileSync(tempFilePath, audioBuffer);
 
-    // Create FormData for OpenAI
-    const FormData = (await import('form-data')).default;
-    const formData = new FormData();
-    formData.append('file', audioBuffer, {
-      filename: 'audio.webm',
-      contentType: 'audio/webm',
-    });
-    formData.append('model', 'whisper-1');
-    formData.append('language', 'en');
+    try {
+      // Use OpenAI SDK with file stream
+      const transcription = await openai.audio.transcriptions.create({
+        file: fs.createReadStream(tempFilePath),
+        model: "whisper-1",
+        language: "en",
+      });
 
-    // Call OpenAI Whisper API directly
-    const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        ...formData.getHeaders(),
-      },
-      body: formData,
-    });
+      // Clean up temp file
+      fs.unlinkSync(tempFilePath);
 
-    const data = await response.json();
-
-    if (response.ok) {
       res.json({ 
-        text: data.text,
+        text: transcription.text,
         success: true 
       });
-    } else {
-      throw new Error(data.error?.message || 'Transcription failed');
+    } catch (transcribeError) {
+      // Clean up temp file on error
+      if (fs.existsSync(tempFilePath)) {
+        fs.unlinkSync(tempFilePath);
+      }
+      throw transcribeError;
     }
 
   } catch (error) {
