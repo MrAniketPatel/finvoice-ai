@@ -1900,7 +1900,7 @@ html {
   bottom: 0;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
-  z-index: 999;
+  z-index: 10000;
   animation: fadeIn 0.3s ease;
 }
 
@@ -3714,137 +3714,69 @@ a:focus-visible {
 /* Mobile responsive for premium modal */
 @media (max-width: 768px) {
   .premium-modal {
-    padding: 20px;
-    width: 92%;
-    max-width: 400px;
-    max-height: 90vh;
+    padding: 20px 16px 16px 16px;
+    width: 90%;
+    max-width: 380px;
+    max-height: 85vh;
     border-radius: 12px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
   
+  .modal-close {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 10002;
+  }
+  
   .premium-header {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    padding-top: 8px;
   }
   
   .premium-icon {
-    font-size: 36px;
-    margin-bottom: 12px;
+    font-size: 32px;
+    margin-bottom: 8px;
   }
   
   .premium-header h2 {
-    font-size: 20px;
-    margin-bottom: 6px;
+    font-size: 18px;
+    margin-bottom: 4px;
   }
   
   .premium-subtitle {
-    font-size: 13px;
-  }
-  
-  .premium-content {
-    gap: 16px;
-  }
-  
-  .premium-plan-card {
-    padding: 20px;
-    border-radius: 12px;
-  }
-  
-  .plan-badge {
-    font-size: 10px;
-    padding: 4px 10px;
-  }
-  
-  .premium-plan-card h3 {
-    font-size: 18px;
-    margin-bottom: 12px;
-  }
-  
-  .plan-price {
-    margin-bottom: 16px;
-  }
-  
-  .plan-price .price {
-    font-size: 32px;
-  }
-  
-  .plan-price .period {
-    font-size: 14px;
-  }
-  
-  .plan-features {
-    margin-bottom: 16px;
-  }
-  
-  .plan-features li {
-    padding: 8px 0;
-    font-size: 13px;
-  }
-  
-  .btn-upgrade {
-    padding: 12px;
-    font-size: 14px;
-  }
-  
-  .premium-benefits {
-    padding: 16px;
-    border-radius: 12px;
-  }
-  
-  .premium-benefits h4 {
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
-  
-  .benefit-item {
-    padding: 10px 0;
-    gap: 12px;
-  }
-  
-  .benefit-icon {
-    font-size: 24px;
-  }
-  
-  .benefit-item strong {
-    font-size: 13px;
-  }
-  
-  .benefit-item p {
     font-size: 12px;
   }
   
-  .modal-close {
-    width: 28px;
-    height: 28px;
-    font-size: 16px;
-    top: 12px;
-    right: 12px;
-  }
-}
-
-/* Extra small screens (phones in portrait) */
-@media (max-width: 480px) {
-  .premium-modal {
-    padding: 16px;
-    width: 94%;
-    max-width: 340px;
-  }
-  
-  .premium-header h2 {
-    font-size: 18px;
-  }
-  
-  .premium-icon {
-    font-size: 32px;
+  .premium-content {
+    gap: 12px;
   }
   
   .premium-plan-card {
     padding: 16px;
+    border-radius: 10px;
+  }
+  
+  .plan-badge {
+    font-size: 9px;
+    padding: 3px 8px;
+    top: 8px;
+    right: 8px;
   }
   
   .premium-plan-card h3 {
     font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .plan-price {
+    margin-bottom: 12px;
   }
   
   .plan-price .price {
@@ -3852,12 +3784,16 @@ a:focus-visible {
   }
   
   .plan-price .period {
-    font-size: 12px;
+    font-size: 13px;
+  }
+  
+  .plan-features {
+    margin-bottom: 12px;
   }
   
   .plan-features li {
-    font-size: 12px;
     padding: 6px 0;
+    font-size: 12px;
   }
   
   .btn-upgrade {
@@ -3865,8 +3801,23 @@ a:focus-visible {
     font-size: 13px;
   }
   
+  .premium-benefits {
+    padding: 12px;
+    border-radius: 10px;
+  }
+  
   .premium-benefits h4 {
     font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .benefit-item {
+    padding: 8px 0;
+    gap: 10px;
+  }
+  
+  .benefit-icon {
+    font-size: 20px;
   }
   
   .benefit-item strong {
@@ -3875,6 +3826,82 @@ a:focus-visible {
   
   .benefit-item p {
     font-size: 11px;
+  }
+}
+
+/* Extra small screens (phones in portrait) */
+@media (max-width: 480px) {
+  .premium-modal {
+    padding: 16px 12px 12px 12px;
+    width: 92%;
+    max-width: 340px;
+    max-height: 82vh;
+  }
+  
+  .modal-close {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    top: 8px;
+    right: 8px;
+  }
+  
+  .premium-header h2 {
+    font-size: 16px;
+  }
+  
+  .premium-icon {
+    font-size: 28px;
+  }
+  
+  .premium-plan-card {
+    padding: 14px;
+  }
+  
+  .premium-plan-card h3 {
+    font-size: 15px;
+  }
+  
+  .plan-price .price {
+    font-size: 26px;
+  }
+  
+  .plan-price .period {
+    font-size: 12px;
+  }
+  
+  .plan-features li {
+    font-size: 11px;
+    padding: 5px 0;
+  }
+  
+  .btn-upgrade {
+    padding: 9px;
+    font-size: 12px;
+  }
+  
+  .premium-benefits {
+    padding: 10px;
+  }
+  
+  .premium-benefits h4 {
+    font-size: 13px;
+  }
+  
+  .benefit-item {
+    padding: 6px 0;
+  }
+  
+  .benefit-icon {
+    font-size: 18px;
+  }
+  
+  .benefit-item strong {
+    font-size: 11px;
+  }
+  
+  .benefit-item p {
+    font-size: 10px;
   }
 }
 
