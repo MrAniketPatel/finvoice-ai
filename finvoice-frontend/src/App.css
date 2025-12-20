@@ -3711,6 +3711,65 @@ a:focus-visible {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
+/* Mobile responsive for premium modal */
+@media (max-width: 768px) {
+  .premium-modal {
+    padding: 24px;
+    width: 95%;
+    max-height: 95vh;
+    border-radius: 16px;
+  }
+  
+  .premium-header h2 {
+    font-size: 22px;
+  }
+  
+  .premium-subtitle {
+    font-size: 14px;
+  }
+  
+  .premium-plan-card {
+    padding: 24px;
+  }
+  
+  .premium-plan-card h3 {
+    font-size: 20px;
+  }
+  
+  .plan-price .price {
+    font-size: 36px;
+  }
+  
+  .plan-price .period {
+    font-size: 16px;
+  }
+  
+  .plan-features li {
+    padding: 10px 0;
+    font-size: 14px;
+  }
+  
+  .premium-benefits {
+    padding: 16px;
+  }
+  
+  .benefit-item {
+    padding: 12px 0;
+  }
+  
+  .benefit-icon {
+    font-size: 24px;
+  }
+  
+  .benefit-item strong {
+    font-size: 14px;
+  }
+  
+  .benefit-item p {
+    font-size: 13px;
+  }
+}
+
 .premium-header {
   text-align: center;
   margin-bottom: 30px;
