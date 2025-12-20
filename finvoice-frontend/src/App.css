@@ -3714,47 +3714,92 @@ a:focus-visible {
 /* Mobile responsive for premium modal */
 @media (max-width: 768px) {
   .premium-modal {
-    padding: 24px;
-    width: 95%;
-    max-height: 95vh;
-    border-radius: 16px;
+    padding: 20px;
+    width: 92%;
+    max-width: 400px;
+    max-height: 90vh;
+    border-radius: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .premium-header {
+    margin-bottom: 20px;
+  }
+  
+  .premium-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
   }
   
   .premium-header h2 {
-    font-size: 22px;
+    font-size: 20px;
+    margin-bottom: 6px;
   }
   
   .premium-subtitle {
-    font-size: 14px;
+    font-size: 13px;
+  }
+  
+  .premium-content {
+    gap: 16px;
   }
   
   .premium-plan-card {
-    padding: 24px;
+    padding: 20px;
+    border-radius: 12px;
+  }
+  
+  .plan-badge {
+    font-size: 10px;
+    padding: 4px 10px;
   }
   
   .premium-plan-card h3 {
-    font-size: 20px;
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .plan-price {
+    margin-bottom: 16px;
   }
   
   .plan-price .price {
-    font-size: 36px;
+    font-size: 32px;
   }
   
   .plan-price .period {
-    font-size: 16px;
+    font-size: 14px;
+  }
+  
+  .plan-features {
+    margin-bottom: 16px;
   }
   
   .plan-features li {
-    padding: 10px 0;
+    padding: 8px 0;
+    font-size: 13px;
+  }
+  
+  .btn-upgrade {
+    padding: 12px;
     font-size: 14px;
   }
   
   .premium-benefits {
     padding: 16px;
+    border-radius: 12px;
+  }
+  
+  .premium-benefits h4 {
+    font-size: 16px;
+    margin-bottom: 12px;
   }
   
   .benefit-item {
-    padding: 12px 0;
+    padding: 10px 0;
+    gap: 12px;
   }
   
   .benefit-icon {
@@ -3762,11 +3807,74 @@ a:focus-visible {
   }
   
   .benefit-item strong {
-    font-size: 14px;
+    font-size: 13px;
   }
   
   .benefit-item p {
+    font-size: 12px;
+  }
+  
+  .modal-close {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+    top: 12px;
+    right: 12px;
+  }
+}
+
+/* Extra small screens (phones in portrait) */
+@media (max-width: 480px) {
+  .premium-modal {
+    padding: 16px;
+    width: 94%;
+    max-width: 340px;
+  }
+  
+  .premium-header h2 {
+    font-size: 18px;
+  }
+  
+  .premium-icon {
+    font-size: 32px;
+  }
+  
+  .premium-plan-card {
+    padding: 16px;
+  }
+  
+  .premium-plan-card h3 {
+    font-size: 16px;
+  }
+  
+  .plan-price .price {
+    font-size: 28px;
+  }
+  
+  .plan-price .period {
+    font-size: 12px;
+  }
+  
+  .plan-features li {
+    font-size: 12px;
+    padding: 6px 0;
+  }
+  
+  .btn-upgrade {
+    padding: 10px;
     font-size: 13px;
+  }
+  
+  .premium-benefits h4 {
+    font-size: 14px;
+  }
+  
+  .benefit-item strong {
+    font-size: 12px;
+  }
+  
+  .benefit-item p {
+    font-size: 11px;
   }
 }
 
