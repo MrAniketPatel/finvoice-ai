@@ -1,27 +1,116 @@
-import React, { useState } from "react";
-import useVoiceInput from "../hooks/useVoiceInput";
-import { parseTransactionVoice, parseAlertVoice } from "../utils/voiceParser";
+import React, { useState, useEffect } from "react";
 import { API_ENDPOINTS } from "../config";
+import PremiumModal from "./PremiumModal";
+import useAudioRecorder from "../hooks/useAudioRecorder";
+import { parseTransactionVoice, parseAlertVoice } from "../utils/voiceParser";
 
 function FloatingVoiceButton({ onRefresh }) {
-  const { isListening, transcript, isSupported, startListening } = useVoiceInput();
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [userTier, setUserTier] = useState('free');
   const [showTooltip, setShowTooltip] = useState(false);
   const [processing, setProcessing] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
+  
+  const { isRecording, audioBlob, error, startRecording, stopRecording, clearRecording } = useAudioRecorder();
 
-  React.useEffect(() => {
-    if (transcript && !processing) {
-      handleVoiceCommand(transcript);
+  useEffect(() => {
+    checkSubscription();
+  }, []);
+
+  useEffect(() => {
+    if (audioBlob && !processing) {
+      handleAudioTranscription();
     }
-  }, [transcript]);
+  }, [audioBlob]);
 
-  const handleVoiceCommand = async (text) => {
-    setProcessing(true);
-    const lowerText = text.toLowerCase();
-
+  const checkSubscription = async () => {
     try {
       const token = localStorage.getItem("token");
+      const res = await fetch(API_ENDPOINTS.PROFILE, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUserTier(data.subscriptionTier || 'free');
+      }
+    } catch (err) {
+      console.error("Error checking subscription:", err);
+    }
+  };
 
+  const handleClick = () => {
+    // Check if user has Quarterly or Yearly plan
+    if (userTier === 'free' || userTier === 'monthly') {
+      setShowPremiumModal(true);
+      return;
+    }
+
+    // Premium user - start/stop recording
+    if (isRecording) {
+      stopRecording();
+      setMessage('Processing...');
+    } else {
+      clearRecording();
+      setMessage('');
+      startRecording();
+    }
+  };
+
+  const handleAudioTranscription = async () => {
+    setProcessing(true);
+    
+    try {
+      const token = localStorage.getItem("token");
+      
+      // Convert blob to base64
+      const reader = new FileReader();
+      reader.readAsDataURL(audioBlob);
+      
+      reader.onloadend = async () => {
+        const base64Audio = reader.result.split(',')[1]; // Remove data:audio/webm;base64, prefix
+        
+        // Send to Whisper API
+        const res = await fetch(API_ENDPOINTS.AI.TRANSCRIBE, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ audioBase64: base64Audio })
+        });
+
+        const data = await res.json();
+        
+        if (res.ok && data.text) {
+          setMessage(`Heard: "${data.text}"`);
+          
+          // Process the transcribed text
+          await processVoiceCommand(data.text);
+        } else {
+          setMessage('❌ Could not understand audio');
+        }
+        
+        setProcessing(false);
+        clearRecording();
+        
+        // Clear message after 5 seconds
+        setTimeout(() => setMessage(''), 5000);
+      };
+      
+    } catch (err) {
+      console.error('Transcription error:', err);
+      setMessage('❌ Error processing audio');
+      setProcessing(false);
+      clearRecording();
+      setTimeout(() => setMessage(''), 3000);
+    }
+  };
+
+  const processVoiceCommand = async (text) => {
+    const lowerText = text.toLowerCase();
+    const token = localStorage.getItem("token");
+
+    try {
       if (
         lowerText.includes("add") ||
         lowerText.includes("expense") ||
@@ -30,10 +119,9 @@ function FloatingVoiceButton({ onRefresh }) {
         lowerText.includes("earned")
       ) {
         const parsed = parseTransactionVoice(text);
+        
         if (!parsed.amount) {
-          setMessage("❌ Amount not clear");
-          setTimeout(() => setMessage(""), 3000);
-          setProcessing(false);
+          setMessage('❌ Could not understand amount');
           return;
         }
 
@@ -50,7 +138,8 @@ function FloatingVoiceButton({ onRefresh }) {
           setMessage(`✅ Added ${parsed.type}: ₹${parsed.amount}`);
           if (onRefresh) onRefresh();
         } else {
-          setMessage("❌ Failed");
+          const errorData = await res.json();
+          setMessage(errorData.message || '❌ Failed to add transaction');
         }
       } else if (
         lowerText.includes("remind") ||
@@ -58,10 +147,9 @@ function FloatingVoiceButton({ onRefresh }) {
         lowerText.includes("payment")
       ) {
         const parsed = parseAlertVoice(text);
+        
         if (!parsed.amount) {
-          setMessage("❌ Amount not clear");
-          setTimeout(() => setMessage(""), 3000);
-          setProcessing(false);
+          setMessage('❌ Could not understand amount');
           return;
         }
 
@@ -78,37 +166,58 @@ function FloatingVoiceButton({ onRefresh }) {
           setMessage(`✅ Alert created`);
           if (onRefresh) onRefresh();
         } else {
-          setMessage("❌ Failed");
+          setMessage('❌ Failed to create alert');
         }
       } else {
-        setMessage("❓ Try: 'Add expense 500 for food'");
+        setMessage('❓ Try: "Add expense 500 for food"');
       }
     } catch (err) {
-      setMessage("❌ Error");
+      console.error('Command processing error:', err);
+      setMessage('❌ Error processing command');
     }
-
-    setProcessing(false);
-    setTimeout(() => setMessage(""), 3000);
   };
 
-  if (!isSupported) {
-    return null;
+  if (error) {
+    return (
+      <button
+        className="floating-voice-btn"
+        onClick={() => alert('Microphone access required. Please allow microphone access in your browser settings.')}
+        title="Microphone access required"
+      >
+        🎤❌
+      </button>
+    );
   }
 
   return (
     <>
       <button
-        className={`floating-voice-btn ${isListening ? "listening" : ""}`}
-        onClick={startListening}
-        disabled={isListening || processing}
+        className={`floating-voice-btn ${isRecording ? 'recording' : ''} ${processing ? 'processing' : ''}`}
+        onClick={handleClick}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
-        title="Click to speak"
+        disabled={processing}
+        title={isRecording ? "Click to stop recording" : "Click to start recording"}
       >
-        {processing ? "⏳" : isListening ? "🎤" : "🎤"}
+        {processing ? '⏳' : isRecording ? '🔴' : '🎤'}
+        {(userTier === 'free' || userTier === 'monthly') && (
+          <span style={{
+            position: 'absolute',
+            top: '-5px',
+            right: '-5px',
+            background: 'linear-gradient(135deg, #FFD700, #FFA500)',
+            color: 'white',
+            fontSize: '10px',
+            padding: '2px 6px',
+            borderRadius: '10px',
+            fontWeight: '700'
+          }}>
+            PRO
+          </span>
+        )}
       </button>
 
-      {(showTooltip || message || transcript) && (
+      {(showTooltip || message) && (
         <div
           style={{
             position: "fixed",
@@ -122,23 +231,28 @@ function FloatingVoiceButton({ onRefresh }) {
             zIndex: 999,
           }}
         >
-          {message && (
-            <p style={{ margin: 0, fontSize: "14px", fontWeight: "bold" }}>
+          {message ? (
+            <p style={{ margin: 0, fontSize: "14px", fontWeight: "600" }}>
               {message}
             </p>
-          )}
-          {transcript && !message && (
+          ) : (
             <p style={{ margin: 0, fontSize: "13px", color: "#666" }}>
-              "{transcript}"
-            </p>
-          )}
-          {!message && !transcript && showTooltip && (
-            <p style={{ margin: 0, fontSize: "13px", color: "#666" }}>
-              Click to add transactions or alerts with voice
+              {(userTier === 'free' || userTier === 'monthly') 
+                ? "🎤 AI Voice Assistant - Upgrade to Quarterly or Yearly plan"
+                : isRecording 
+                  ? "🔴 Recording... Click to stop"
+                  : "🎤 Click to record voice command"}
             </p>
           )}
         </div>
       )}
+
+      <PremiumModal
+        isOpen={showPremiumModal}
+        onClose={() => setShowPremiumModal(false)}
+        feature="AI Voice Assistant"
+        requiredPlan="quarterly"
+      />
     </>
   );
 }

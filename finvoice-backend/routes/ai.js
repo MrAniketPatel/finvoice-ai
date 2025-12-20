@@ -33,20 +33,36 @@ router.post("/transcribe", authMiddleware, requireFeature("ai_voice"), async (re
     // Convert base64 to buffer
     const audioBuffer = Buffer.from(audioBase64, 'base64');
 
-    // Create a file-like object for OpenAI
-    const file = new File([audioBuffer], "audio.webm", { type: "audio/webm" });
+    // Create FormData for OpenAI
+    const FormData = (await import('form-data')).default;
+    const formData = new FormData();
+    formData.append('file', audioBuffer, {
+      filename: 'audio.webm',
+      contentType: 'audio/webm',
+    });
+    formData.append('model', 'whisper-1');
+    formData.append('language', 'en');
 
-    // Transcribe using Whisper
-    const transcription = await openai.audio.transcriptions.create({
-      file: file,
-      model: "whisper-1",
-      language: "en",
+    // Call OpenAI Whisper API directly
+    const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        ...formData.getHeaders(),
+      },
+      body: formData,
     });
 
-    res.json({ 
-      text: transcription.text,
-      success: true 
-    });
+    const data = await response.json();
+
+    if (response.ok) {
+      res.json({ 
+        text: data.text,
+        success: true 
+      });
+    } else {
+      throw new Error(data.error?.message || 'Transcription failed');
+    }
 
   } catch (error) {
     console.error("Whisper transcription error:", error);

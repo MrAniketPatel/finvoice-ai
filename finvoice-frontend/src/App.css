@@ -3903,3 +3903,34 @@ a:focus-visible {
 .premium-badge-icon {
   font-size: 12px;
 }
+
+
+/* Voice Recording Animations */
+.floating-voice-btn.recording {
+  animation: pulse-recording 1.5s ease-in-out infinite;
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+}
+
+.floating-voice-btn.processing {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes pulse-recording {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 12px 32px rgba(239, 68, 68, 0.6);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,222 +1,80 @@
 import React, { useEffect, useState } from "react";
-import useVoiceInput from "../hooks/useVoiceInput";
-import { parseTransactionVoice, parseAlertVoice } from "../utils/voiceParser";
 import { API_ENDPOINTS } from "../config";
+import PremiumModal from "./PremiumModal";
 
 function VoiceAssistant({ onRefresh }) {
-  const { isListening, transcript, isSupported, startListening } = useVoiceInput();
-  const [message, setMessage] = useState("");
-  const [processing, setProcessing] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [userTier, setUserTier] = useState('free');
 
   useEffect(() => {
-    if (transcript && !processing) {
-      handleVoiceCommand(transcript);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transcript]);
+    checkSubscription();
+  }, []);
 
-  const handleVoiceCommand = async (text) => {
-    setProcessing(true);
-    const lowerText = text.toLowerCase();
-
+  const checkSubscription = async () => {
     try {
       const token = localStorage.getItem("token");
-
-      if (
-        lowerText.includes("add") ||
-        lowerText.includes("expense") ||
-        lowerText.includes("income") ||
-        lowerText.includes("spent") ||
-        lowerText.includes("earned") ||
-        lowerText.includes("received")
-      ) {
-        const parsed = parseTransactionVoice(text);
-
-        if (!parsed.amount) {
-          setMessage("❌ Could not understand the amount. Please try again.");
-          setProcessing(false);
-          return;
-        }
-
-        const res = await fetch(API_ENDPOINTS.TRANSACTIONS, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(parsed),
-        });
-
-        if (res.ok) {
-          setMessage(
-            `✅ Added ${parsed.type}: ₹${parsed.amount} for ${parsed.category}`
-          );
-          if (onRefresh) onRefresh();
-        } else {
-          setMessage("❌ Failed to add transaction. Please try again.");
-        }
-      } else if (
-        lowerText.includes("remind") ||
-        lowerText.includes("alert") ||
-        lowerText.includes("payment") ||
-        lowerText.includes("due")
-      ) {
-        const parsed = parseAlertVoice(text);
-
-        if (!parsed.amount) {
-          setMessage("❌ Could not understand the amount. Please try again.");
-          setProcessing(false);
-          return;
-        }
-
-        const res = await fetch(API_ENDPOINTS.ALERTS, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(parsed),
-        });
-
-        if (res.ok) {
-          setMessage(`✅ Created alert: ${parsed.title} - ₹${parsed.amount}`);
-          if (onRefresh) onRefresh();
-        } else {
-          setMessage("❌ Failed to create alert. Please try again.");
-        }
-      } else if (
-        lowerText.includes("balance") ||
-        lowerText.includes("total") ||
-        lowerText.includes("summary")
-      ) {
-        setMessage(
-          "📊 Check your dashboard for balance and summary information!"
-        );
-      } else {
-        setMessage(
-          "❓ Try: 'Add expense 500 for food' or 'Remind me rent payment 15000 next week'"
-        );
+      const res = await fetch(API_ENDPOINTS.PROFILE, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUserTier(data.subscriptionTier || 'free');
       }
     } catch (err) {
-      console.error("Voice command error:", err);
-      setMessage("❌ Something went wrong. Please try again.");
+      console.error("Error checking subscription:", err);
     }
-
-    setProcessing(false);
-    setTimeout(() => setMessage(""), 5000);
   };
 
-  if (!isSupported) {
-    return (
-      <div className="voice-assistant">
-        <div className="voice-card">
-          <p style={{ color: "var(--gray-500)", fontSize: "14px", margin: 0 }}>
-            Voice input not supported in this browser. Try Chrome, Edge, or Safari.
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const handleVoiceClick = () => {
+    if (userTier === 'free' || userTier === 'monthly') {
+      setShowPremiumModal(true);
+    } else {
+      alert("Voice feature coming soon! OpenAI Whisper integration in progress.");
+    }
+  };
 
   return (
-    <div className="voice-assistant">
-      <div className="voice-card">
-        <h3>🎤 Voice Assistant</h3>
-
-        <button
-          onClick={() => {
-            console.log('Voice button clicked');
-            startListening();
-          }}
-          disabled={isListening || processing}
-          className={`voice-btn ${isListening ? "listening" : ""}`}
-        >
-          {processing ? (
-            <>⏳ Processing...</>
-          ) : isListening ? (
-            <>🔴 Listening... Speak clearly!</>
-          ) : (
-            <>🎤 Click & Speak</>
-          )}
-        </button>
-
-        <div
-          style={{
-            marginTop: "16px",
-            padding: "16px",
-            background: isListening ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 255, 255, 0.2)",
-            borderRadius: "8px",
-            minHeight: "80px",
-            border: isListening ? "2px solid var(--white)" : "1px solid rgba(255, 255, 255, 0.3)",
-            transition: "all 0.3s",
-          }}
-        >
-          {isListening && (
-            <p
-              style={{
-                margin: "0 0 8px 0",
-                fontSize: "14px",
-                color: "var(--white)",
-                fontWeight: "700",
-                animation: "pulse 1.5s infinite",
-              }}
-            >
-              🎤 Listening... Speak now! (e.g., "Add expense 500 for food")
-            </p>
-          )}
-          {transcript && (
-            <p
-              style={{
-                margin: "0 0 8px 0",
-                fontSize: "14px",
-                color: "var(--white)",
-                fontWeight: "600",
-              }}
-            >
-              <strong>You said:</strong> "{transcript}"
-            </p>
-          )}
-          {message && (
-            <p
-              style={{
-                margin: "0",
-                fontSize: "14px",
-                fontWeight: "700",
-                color: "var(--white)",
-              }}
-            >
-              {message}
-            </p>
-          )}
-          {!transcript && !message && !isListening && (
-            <div>
-              <p
-                style={{
-                  margin: "0 0 12px 0",
-                  fontSize: "13px",
-                  fontWeight: "700",
-                  color: "var(--white)",
-                }}
-              >
-                💡 Try saying:
-              </p>
-              <ul
-                style={{
-                  margin: "0",
-                  paddingLeft: "20px",
-                  fontSize: "13px",
-                  lineHeight: "1.8",
-                  color: "rgba(255, 255, 255, 0.9)",
-                }}
-              >
-                <li>"Add expense 500 rupees for food"</li>
-                <li>"Income 5000 salary"</li>
-                <li>"Remind me rent payment 15000 next week"</li>
-              </ul>
-            </div>
-          )}
-        </div>
+    <div className="voice-assistant-card">
+      <div className="voice-header">
+        <h3>🎤 AI Voice Assistant</h3>
+        {(userTier === 'free' || userTier === 'monthly') && (
+          <span className="premium-badge">
+            <span className="premium-badge-icon">⭐</span>
+            PREMIUM
+          </span>
+        )}
       </div>
+      <p className="voice-description">
+        {(userTier === 'free' || userTier === 'monthly')
+          ? "Upgrade to Quarterly or Yearly plan to add transactions using voice commands powered by OpenAI Whisper."
+          : "Add transactions and alerts using voice commands powered by OpenAI Whisper."}
+      </p>
+      <button 
+        className="voice-btn"
+        onClick={handleVoiceClick}
+        style={{
+          background: (userTier === 'free' || userTier === 'monthly')
+            ? 'linear-gradient(135deg, #FFD700, #FFA500)'
+            : 'linear-gradient(135deg, #71C7B8, #A8DADC)',
+          color: 'white',
+          border: 'none',
+          padding: '12px 24px',
+          borderRadius: '8px',
+          fontWeight: '600',
+          cursor: 'pointer',
+          fontSize: '14px',
+          width: '100%'
+        }}
+      >
+        {(userTier === 'free' || userTier === 'monthly') ? '⭐ Upgrade to Use Voice' : '🎤 Start Voice Command'}
+      </button>
+
+      <PremiumModal
+        isOpen={showPremiumModal}
+        onClose={() => setShowPremiumModal(false)}
+        feature="AI Voice Assistant"
+        requiredPlan="quarterly"
+      />
     </div>
   );
 }
