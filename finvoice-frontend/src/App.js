@@ -33,6 +33,8 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("rememberMe");
+    sessionStorage.removeItem("token"); // Clean up old sessionStorage tokens
     setIsLoggedIn(false);
     setShowLanding(false);
   };

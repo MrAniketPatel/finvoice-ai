@@ -33,12 +33,10 @@ function Login({ onLoginSuccess, switchToRegister, onBack }) {
         throw new Error(data.msg || "Login failed. Please check your credentials.");
       }
 
-      // Store token based on remember me preference
+      // Always store token in localStorage for consistent experience
+      localStorage.setItem("token", data.token);
       if (rememberMe) {
-        localStorage.setItem("token", data.token);
         localStorage.setItem("rememberMe", "true");
-      } else {
-        sessionStorage.setItem("token", data.token);
       }
       onLoginSuccess();
     } catch (err) {
