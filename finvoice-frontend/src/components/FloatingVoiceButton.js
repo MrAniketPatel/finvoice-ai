@@ -3,7 +3,7 @@ import { API_ENDPOINTS } from "../config";
 import useAudioRecorder from "../hooks/useAudioRecorder";
 import { parseTransactionVoice, parseAlertVoice } from "../utils/voiceParser";
 
-function FloatingVoiceButton({ onRefresh }) {
+function FloatingVoiceButton({ onRefresh, onNavigate }) {
   const [userTier, setUserTier] = useState('free');
   const [showTooltip, setShowTooltip] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -39,8 +39,10 @@ function FloatingVoiceButton({ onRefresh }) {
   const handleClick = () => {
     // Check if user has Quarterly or Yearly plan
     if (userTier === 'free' || userTier === 'monthly') {
-      // Redirect to subscription page instead of showing modal
-      window.location.hash = '#subscription';
+      // Navigate to subscription page using parent navigation function
+      if (onNavigate) {
+        onNavigate('subscription');
+      }
       return;
     }
 

@@ -3,7 +3,7 @@ import VoiceAssistant from "./VoiceAssistant";
 import AIInsights from "./AIInsights";
 import { API_ENDPOINTS } from "../config";
 
-function Dashboard() {
+function Dashboard({ onNavigate }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -61,7 +61,7 @@ function Dashboard() {
         Here's your financial overview at a glance
       </p>
       
-      <VoiceAssistant onRefresh={fetchDashboardData} />
+      <VoiceAssistant onRefresh={fetchDashboardData} onNavigate={onNavigate} />
       
       {/* AI Insights */}
       {console.log("Dashboard data:", data)}

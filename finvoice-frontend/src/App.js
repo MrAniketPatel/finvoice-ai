@@ -118,7 +118,7 @@ function App() {
   const renderView = () => {
     switch (view) {
       case "dashboard":
-        return <Dashboard />;
+        return <Dashboard onNavigate={(page) => setView(page)} />;
       case "balance":
         return <BalanceSheet />;
       case "alerts":
@@ -128,7 +128,7 @@ function App() {
       case "subscription":
         return <SubscriptionPage />;
       default:
-        return <Dashboard />;
+        return <Dashboard onNavigate={(page) => setView(page)} />;
     }
   };
 
@@ -334,7 +334,7 @@ function App() {
         )}
         
         {renderView()}
-        <FloatingVoiceButton onRefresh={handleRefresh} />
+        <FloatingVoiceButton onRefresh={handleRefresh} onNavigate={(page) => setView(page)} />
       </div>
     </div>
   );

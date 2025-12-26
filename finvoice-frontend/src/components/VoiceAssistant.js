@@ -3,7 +3,7 @@ import { API_ENDPOINTS } from "../config";
 import useAudioRecorder from "../hooks/useAudioRecorder";
 import { parseTransactionVoice, parseAlertVoice } from "../utils/voiceParser";
 
-function VoiceAssistant({ onRefresh }) {
+function VoiceAssistant({ onRefresh, onNavigate }) {
   const [userTier, setUserTier] = useState('free');
   const [processing, setProcessing] = useState(false);
   const [message, setMessage] = useState('');
@@ -37,8 +37,10 @@ function VoiceAssistant({ onRefresh }) {
 
   const handleVoiceClick = () => {
     if (userTier === 'free' || userTier === 'monthly') {
-      // Redirect to subscription page instead of showing modal
-      window.location.hash = '#subscription';
+      // Navigate to subscription page using parent navigation function
+      if (onNavigate) {
+        onNavigate('subscription');
+      }
       return;
     }
 
