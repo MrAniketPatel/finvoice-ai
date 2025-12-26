@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { API_ENDPOINTS } from "../config";
-import PremiumModal from "./PremiumModal";
 import useAudioRecorder from "../hooks/useAudioRecorder";
 import { parseTransactionVoice, parseAlertVoice } from "../utils/voiceParser";
 
 function FloatingVoiceButton({ onRefresh }) {
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [userTier, setUserTier] = useState('free');
   const [showTooltip, setShowTooltip] = useState(false);
   const [processing, setProcessing] = useState(false);
@@ -41,7 +39,8 @@ function FloatingVoiceButton({ onRefresh }) {
   const handleClick = () => {
     // Check if user has Quarterly or Yearly plan
     if (userTier === 'free' || userTier === 'monthly') {
-      setShowPremiumModal(true);
+      // Redirect to subscription page instead of showing modal
+      window.location.hash = '#subscription';
       return;
     }
 
@@ -246,13 +245,6 @@ function FloatingVoiceButton({ onRefresh }) {
           )}
         </div>
       )}
-
-      <PremiumModal
-        isOpen={showPremiumModal}
-        onClose={() => setShowPremiumModal(false)}
-        feature="AI Voice Assistant"
-        requiredPlan="quarterly"
-      />
     </>
   );
 }

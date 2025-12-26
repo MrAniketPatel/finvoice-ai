@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { API_ENDPOINTS } from "../config";
-import PremiumModal from "./PremiumModal";
 import useAudioRecorder from "../hooks/useAudioRecorder";
 import { parseTransactionVoice, parseAlertVoice } from "../utils/voiceParser";
 
 function VoiceAssistant({ onRefresh }) {
-  const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [userTier, setUserTier] = useState('free');
   const [processing, setProcessing] = useState(false);
   const [message, setMessage] = useState('');
@@ -39,7 +37,8 @@ function VoiceAssistant({ onRefresh }) {
 
   const handleVoiceClick = () => {
     if (userTier === 'free' || userTier === 'monthly') {
-      setShowPremiumModal(true);
+      // Redirect to subscription page instead of showing modal
+      window.location.hash = '#subscription';
       return;
     }
 
@@ -257,13 +256,6 @@ function VoiceAssistant({ onRefresh }) {
           {getButtonText()}
         </button>
       </div>
-
-      <PremiumModal
-        isOpen={showPremiumModal}
-        onClose={() => setShowPremiumModal(false)}
-        feature="AI Voice Assistant"
-        requiredPlan="quarterly"
-      />
     </div>
   );
 }
