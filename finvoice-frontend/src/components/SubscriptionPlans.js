@@ -117,11 +117,13 @@ function SubscriptionPlans({ currentPlan = 'free', onUpgrade }) {
   const openModal = (key, plan) => {
     setModalPlan({ key, ...plan });
     setShowModal(true);
+    document.body.classList.add('modal-open');
   };
 
   const closeModal = () => {
     setShowModal(false);
     setModalPlan(null);
+    document.body.classList.remove('modal-open');
   };
 
   return (
