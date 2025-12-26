@@ -10,7 +10,7 @@ node_modules/
 *.env
 
 # OS files
-.DS_Store
+.DS_StoreReact frontend
 Thumbs.db
 
 # IDE
