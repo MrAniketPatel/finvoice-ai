@@ -12,6 +12,7 @@ import SubscriptionPage from "./components/SubscriptionPage.js";
 import PrivacyPolicy from "./components/PrivacyPolicy.js";
 import TermsOfService from "./components/TermsOfService.js";
 import Contact from "./components/Contact.js";
+import { Analytics } from "@vercel/analytics/react";
 // Navigation removed - using inline navbar
 import useAlerts from "./hooks/useAlerts.js";
 
@@ -336,6 +337,7 @@ function App() {
         {renderView()}
         <FloatingVoiceButton onRefresh={handleRefresh} />
       </div>
+      <Analytics />
     </div>
   );
 }
